@@ -1,11 +1,25 @@
 import express from "express";
+import "reflect-metadata";
+import AppDatasource from "./db/datasource";
 
 
-const app = express()
+const app = express();
 
-const PORT = 3000
+app.use(express.json())
 
 
-app.listen(PORT, ()=>{
-    console.log(`Server running on PORT ${PORT}`)
-})
+const PORT = 3000;
+
+AppDatasource.initialize()
+  .then(() => {
+    console.log("Database connected successfully");
+
+    app.listen(PORT, () => {
+      console.log(`Server is running on port ${PORT}`);
+      console.log(`Environment: ${process.env.NODE_ENV || "development"}`);
+    });
+  })
+  .catch((error) => {
+    console.error("Error connecting to database:", error);
+    process.exit(1);
+  });
