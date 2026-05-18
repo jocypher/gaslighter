@@ -1,0 +1,41 @@
+import e, { NextFunction, Request, Response } from "express";
+import { User } from "../../../../../db/entities/User";
+import appConstants from "../../../../../core/constants/appConstants";
+
+export default async function DeleteUserController(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
+  try {
+    const { email } = req.body;
+
+    const user = await User.findOne({
+      where: {
+        email: email,
+      },
+      select: {
+        id: true,isDeleted:true,deletedAt:true
+        
+      },
+    });
+    if (!user) {
+      return res.status(appConstants.statusCode.NOTFOUND).json({
+        success: false,
+        message: "User doesn't exist",
+      });
+    }
+
+    user.isDeleted = true,
+    user.deletedAt = new Date(Date.now())
+    
+    return res.status(appConstants.statusCode.SUCCESS).json({
+      success: true,
+      message: "Account deleted successfully",
+    });
+    
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+}

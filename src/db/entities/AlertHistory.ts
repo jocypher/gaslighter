@@ -1,9 +1,17 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import {
+  BaseEntity,
+  Column,
+  CreateDateColumn,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from "typeorm";
 import { AlertRule } from "./AlertRule";
 import { AlertHistoryStatus } from "../../core/enums/alertHistoryStatus";
 
 @Entity("alert_history")
-export class AlertHistory {
+export class AlertHistory extends BaseEntity {
   @PrimaryGeneratedColumn("increment")
   id: number;
 

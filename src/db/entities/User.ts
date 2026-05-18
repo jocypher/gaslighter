@@ -1,10 +1,11 @@
-import { BeforeInsert, BeforeUpdate, Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { BaseEntity, BeforeInsert, BeforeUpdate, Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import bcrypt from "bcryptjs"
 import { AlertRule } from "./AlertRule";
 
 
 @Entity("users")
-export class User {
+export class User extends BaseEntity{
+
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
@@ -26,15 +27,21 @@ export class User {
   @UpdateDateColumn({ nullable: true })
   lastUpdate: Date;
 
+  @Column({default:false, type:"boolean"})
+  isDeleted: boolean
+
+  @Column({type:"date"})
+  deletedAt:Date
+
   @BeforeInsert()
   @BeforeUpdate()
   async hashPassword() {
-    if (this.password && !this.password.startsWith("$2a$")) {
+    if (this.password && !this.password.startsWith("$2")) {
       this.password = await bcrypt.hash(this.password, 10);
     }
   }
 
-  async validatePassword(password: string): Promise<boolean> {
+  async  validatePassword(password: string): Promise<boolean> {
     return await bcrypt.compare(password, this.password);
   }
 }

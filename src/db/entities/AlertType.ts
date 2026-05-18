@@ -1,8 +1,8 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity, Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { AlertRule } from "./AlertRule";
 
 @Entity("alert_type")
-export class AlertType{
+export class AlertType extends BaseEntity{
     @PrimaryGeneratedColumn("increment")
     id: number
 
