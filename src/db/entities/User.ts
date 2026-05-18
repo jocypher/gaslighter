@@ -1,50 +1,40 @@
-import { AfterUpdate, BeforeInsert, BeforeUpdate, Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { BeforeInsert, BeforeUpdate, Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import bcrypt from "bcryptjs"
-
+import { AlertRule } from "./AlertRule";
 
 
 @Entity("users")
-export class User{
-    @PrimaryGeneratedColumn("uuid")
-     id: string
+export class User {
+  @PrimaryGeneratedColumn("uuid")
+  id: string;
 
-     @Column("varchar",{unique: true,length: 100})
-     userName: string
+  @Column("varchar", { unique: true, length: 100, nullable: false })
+  userName: string;
 
-     @Column({unique: true})
-     email: string
+  @Column({ unique: true, nullable: false })
+  email: string;
 
-     @Column()
-     password: string
+  @Column({ nullable: false })
+  password: string;
 
-     @Column()
-     accessToken: string
-     
-     @Column({nullable: true })
-     phoneNumber: string
-     
-     @CreateDateColumn()
-     createdDate: Date
-     
-     @UpdateDateColumn()
-     lastUpdate: Date
-    
+  @OneToMany(() => AlertRule, (rule) => rule.user)
+  alertRules: AlertRule[];
 
-     @BeforeInsert()
-     @BeforeUpdate()
-     async hashPassword(){
-         if(this.password && !this.password.startsWith('$2a$')){
-            this.password = await bcrypt.hash(this.password, 10); 
-         }
-     }
+  @CreateDateColumn()
+  createdDate: Date;
 
+  @UpdateDateColumn({ nullable: true })
+  lastUpdate: Date;
 
+  @BeforeInsert()
+  @BeforeUpdate()
+  async hashPassword() {
+    if (this.password && !this.password.startsWith("$2a$")) {
+      this.password = await bcrypt.hash(this.password, 10);
+    }
+  }
 
-     async validatePassword(password:string): Promise<boolean>{
-        return await bcrypt.compare(password, this.password)
-     }
-
-
-     
-
+  async validatePassword(password: string): Promise<boolean> {
+    return await bcrypt.compare(password, this.password);
+  }
 }

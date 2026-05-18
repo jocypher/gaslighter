@@ -1,18 +1,13 @@
 import { DataSourceOptions } from "typeorm";
 import envConstants from "./envConstants";
 
+const datasourceOptions = (): DataSourceOptions => ({
+  type: "postgres",
+  host: envConstants.HOST,
+  port: envConstants.PORT,
+  username: envConstants.USER,
+  password: envConstants.PASSWORD,
+  database: envConstants.DATABASE,
+});
 
-const options =  {
-    type: 'postgres' as const,
-    port: envConstants.PORT,
-    host: envConstants.HOST,
-    username: envConstants.USERNAME,
-    password: envConstants.PASSWORD,
-    database: envConstants.DATABASE
-}
-
-
-
-
-const datasourceOptions = (): DataSourceOptions => options
-export default datasourceOptions
+export default datasourceOptions;

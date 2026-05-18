@@ -9,13 +9,14 @@
     "start": "node dist/index.js"
   },
   "keywords": [],
-  "author": "Jo Reed",
+  "author": "JonnyBoy Reed",
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
     "@types/bcryptjs": "^2.4.6",
     "bcrypt": "^6.0.0",
     "bcryptjs": "^3.0.3",
+    "dotenv": "^17.4.2",
     "express": "^5.2.1",
     "pg": "^8.20.0",
     "reflect-metadata": "^0.2.2",
