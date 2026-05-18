@@ -12,6 +12,7 @@ export default async function RegisterController(
     const { username, email, password } = req.body as RegistrationRequest;
 
     //todo: joi validation will be included to validate the request body
+    
 
     const user = await User.find({
       where: [{ userName: username }, { email: email }],

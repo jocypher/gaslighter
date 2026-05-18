@@ -5,4 +5,6 @@ const appRouter = express.Router()
 
 appRouter.use("/api/v1", router)
 
+export default appRouter
+
 
