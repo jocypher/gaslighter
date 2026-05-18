@@ -1,4 +1,4 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { AlertType } from "./AlertType";
 import { User } from "./User";
 import { AlertRuleStatus } from "../../core/enums/alertRuleStatus";
@@ -6,7 +6,7 @@ import { NotificationType } from "../../core/enums/notificationType";
 import { AlertHistory } from "./AlertHistory";
 
 @Entity("alert_rules")
-export class AlertRule {
+export class AlertRule extends BaseEntity{
   @PrimaryGeneratedColumn("increment")
   id: number;
 
