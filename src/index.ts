@@ -1,7 +1,9 @@
 import express from "express";
 import "reflect-metadata";
 import AppDatasource from "./db/datasource";
+import dotenv from "dotenv"
 
+dotenv.config()
 
 const app = express();
 
