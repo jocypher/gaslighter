@@ -27,12 +27,13 @@ export class User extends BaseEntity{
   @UpdateDateColumn({ nullable: true })
   lastUpdate: Date;
 
+  @Column({nullable: true})
   accessToken: string
 
   @Column({default:false, type:"boolean"})
   isDeleted: boolean
 
-  @Column({type:"date"})
+  @Column({type:"date", nullable: true})
   deletedAt:Date
 
   @BeforeInsert()

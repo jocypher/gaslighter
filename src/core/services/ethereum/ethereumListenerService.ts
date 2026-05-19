@@ -33,7 +33,10 @@ export class EthereumListenerService{
                 }
 
             })
+            console.log(rules.length)
             for(const rule of rules){
+                console.log(rule)
+                console.log(`New block: ${blockNumber}`);
                 await this.checkBalanceRule(rule)
             }
         })
@@ -55,10 +58,13 @@ export class EthereumListenerService{
                     break
                 case AlertRuleStatus.EQUALS:
                     matches = balanceInWei === rule.thresholdValue
+                    break
+
             }
 
             if(matches){
                 // send email
+                console.log(`Alert triggered for rule ${rule.id}`);
                 // update alert history
                 const alertHistory =  AlertHistory.create({
                     alertRule: {id: rule.id},

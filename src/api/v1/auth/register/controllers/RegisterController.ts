@@ -36,6 +36,9 @@ export default async function RegisterController(
       email: createdUser.email,
     });
 
+    await User.update(createdUser.id, {accessToken: accessToken})
+    
+
     return res.status(201).json({
       success: true,
       data: {

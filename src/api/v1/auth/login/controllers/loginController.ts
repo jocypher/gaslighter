@@ -29,7 +29,7 @@ export async function LoginController(
       });
     }
 
-    const validatePassword = user.validatePassword(password);
+    const validatePassword = await user.validatePassword(password);
 
     if (!validatePassword) {
       return res.status(appConstants.statusCode.UNAUTHORIZED).json({
@@ -37,6 +37,7 @@ export async function LoginController(
         message: "Invalid Credentials",
       });
     }
+
 
     const accessToken = JwtService.generateToken({
       userId: user.id,

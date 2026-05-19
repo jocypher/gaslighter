@@ -10,8 +10,10 @@ import { AlertType } from "./entities/AlertType"
 const AppDatasource = new DataSource({
     ...datasourceOptions(),
     synchronize: true,
-    entities: [User,AlertHistory,AlertRule,AlertType]
+    logging: true,
+    entities: [User ,AlertHistory,AlertRule,AlertType]
 })
+
 
 
 
