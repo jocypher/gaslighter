@@ -7,6 +7,8 @@ import validate from "../../../core/middlewares/joiMiddlewares";
 import { validateLoginSchema } from "./login/validation";
 import LogoutController from "./logout/controllers/LogoutControllers";
 import { authenticate } from "../../../core/middlewares/authMiddlewares";
+import ChangePasswordController from "./changePassword/controllers/ChangePasswordController";
+import { validateChangePasswordSchema } from "./changePassword/validation";
 
 const router = express.Router();
 
@@ -17,5 +19,7 @@ router.post("/login", validate(validateLoginSchema), LoginController);
 router.post("/delete", authenticate, DeleteUserController);
 
 router.post("/logout", authenticate, LogoutController);
+
+router.put("/change-password",authenticate,validate(validateChangePasswordSchema),ChangePasswordController)
 
 export default router;

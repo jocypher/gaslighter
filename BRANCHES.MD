@@ -22,3 +22,5 @@ feat: implement user profile management and authentication features; add passwor
 feat: add Ethereum wallet balance alert functionality; implement alert creation, validation, and listener service
 
 feat: update login and registration controllers; add async password validation and access token storage
+
+feat: refactor change password functionality; update controller and validation schema exports

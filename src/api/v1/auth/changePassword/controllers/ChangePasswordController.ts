@@ -56,3 +56,5 @@ async function ChangePasswordController(
     next(error);
   }
 }
+
+export default ChangePasswordController
