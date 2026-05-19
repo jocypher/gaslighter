@@ -1,18 +1,19 @@
 import e, { NextFunction, Request, Response } from "express";
 import { User } from "../../../../../db/entities/User";
 import appConstants from "../../../../../core/constants/appConstants";
+import { AuthRequest } from "../../../../../core/middlewares/authMiddlewares";
 
 export default async function DeleteUserController(
-  req: Request,
+  req: AuthRequest,
   res: Response,
   next: NextFunction,
 ) {
   try {
-    const { email } = req.body;
+    const id  = req.user?.id as string;
 
     const user = await User.findOne({
       where: {
-        email: email,
+        id: id,
       },
       select: {
         id: true,isDeleted:true,deletedAt:true

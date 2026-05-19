@@ -27,6 +27,8 @@ export class User extends BaseEntity{
   @UpdateDateColumn({ nullable: true })
   lastUpdate: Date;
 
+  accessToken: string
+
   @Column({default:false, type:"boolean"})
   isDeleted: boolean
 

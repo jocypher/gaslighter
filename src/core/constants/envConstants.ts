@@ -7,6 +7,8 @@ dotenv.config()
    USER: process.env.PG_USER ?? "",
    PASSWORD: process.env.PG_PASSWORD ?? "",
    DATABASE: process.env.PG_DATABASE ?? "",
+   JWT_SECRET:process.env.JWT_SECRET??"",
+   JWT_EXPIRES_IN: process.env.JWT_EXPIRES_IN??"1d"
  };
 
 export default envConstants

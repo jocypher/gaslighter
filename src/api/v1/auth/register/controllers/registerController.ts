@@ -1,7 +1,8 @@
 import { Request, Response, NextFunction } from "express";
 import RegistrationRequest from "../interfaces";
 import { User } from "../../../../../db/entities/User";
-import appConstants from "../../../../../core/constants/appConstants";
+import { JwtService } from "../../../../../core/services/jwt/jwtService";
+
 
 export default async function RegisterController(
   req: Request,
@@ -11,40 +12,40 @@ export default async function RegisterController(
   try {
     const { username, email, password } = req.body as RegistrationRequest;
 
-    //todo: joi validation will be included to validate the request body
-    
-
-    const user = await User.find({
+    const existingUser = await User.findOne({
       where: [{ userName: username }, { email: email }],
     });
 
-    if (user) {
-      return res.status(appConstants.statusCode.UNAUTHORIZED).json({
-        success: false,
-        message: "User already exist",
-      });
-    }
-
-    const createUser: Partial<User> = {
-      userName: username,
-      email: email,
-      password: password,
-      alertRules: [],
-    };
-    const createdUser = User.create(createUser);
-    await createdUser.save();
-
-    return res.status(appConstants.statusCode.SUCCESS).json({
-      success: true,
-      message: "User created successfully",
-    });
-  } catch (error: any) {
-    if (error.code === "23505") {
-      return res.status(appConstants.statusCode.SUCCESS).json({
+    if (existingUser) {
+      return res.status(409).json({
         success: false,
         message: "User already exists",
       });
     }
+
+    const createdUser = User.create({
+      userName: username,
+      email,
+      password,
+    });
+
+    await createdUser.save();
+
+    const accessToken = JwtService.generateToken({
+      userId: createdUser.id,
+      email: createdUser.email,
+    });
+
+    return res.status(201).json({
+      success: true,
+      data: {
+        id: createdUser.id,
+        username: createdUser.userName,
+        email: createdUser.email,
+      },
+      accessToken,
+    });
+  } catch (error) {
     next(error);
   }
 }
