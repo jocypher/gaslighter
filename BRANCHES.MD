@@ -18,3 +18,5 @@ feat: add authentication and profile retrieval features
 J00003
 
 feat: implement user profile management and authentication features; add password change functionality
+
+feat: add Ethereum wallet balance alert functionality; implement alert creation, validation, and listener service

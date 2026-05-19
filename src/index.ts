@@ -4,6 +4,7 @@ import AppDatasource from "./db/datasource";
 import dotenv from "dotenv"
 import appRouter from "./api/index";
 import { requestLogger } from "./core/middlewares/reqLoggerMiddlewares";
+import { EthereumListenerService } from "./core/services/ethereum/ethereumListenerService";
 
 
 dotenv.config()
@@ -23,10 +24,11 @@ AppDatasource.initialize()
   .then(() => {
     console.log("Database connected successfully");
 
-    app.listen(PORT, () => {
+    app.listen(PORT, async() => {
       console.log(`Server is running on port ${PORT}`);
       console.log(`Environment: ${process.env.NODE_ENV || "development"}`);
-
+      const ethereumService = new EthereumListenerService()
+      await ethereumService.startListening()
     });
    
   })
