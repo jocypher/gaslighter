@@ -14,3 +14,7 @@ feat: add authentication and profile retrieval features
 - Refactored the API structure for better organization and maintainability.
 - Added TypeScript interfaces for profile responses.
 - Enhanced error handling and response formatting in controllers.
+
+J00003
+
+feat: implement user profile management and authentication features; add password change functionality

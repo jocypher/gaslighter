@@ -13,7 +13,7 @@ export default async function RegisterController(
     const { username, email, password } = req.body as RegistrationRequest;
 
     const existingUser = await User.findOne({
-      where: [{ userName: username }, { email: email }],
+      where: [{ username: username }, { email: email }],
     });
 
     if (existingUser) {
@@ -24,7 +24,7 @@ export default async function RegisterController(
     }
 
     const createdUser = User.create({
-      userName: username,
+      username: username,
       email,
       password,
     });
@@ -40,7 +40,7 @@ export default async function RegisterController(
       success: true,
       data: {
         id: createdUser.id,
-        username: createdUser.userName,
+        username: createdUser.username,
         email: createdUser.email,
       },
       accessToken,
