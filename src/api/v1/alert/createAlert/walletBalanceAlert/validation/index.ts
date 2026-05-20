@@ -13,7 +13,7 @@ export const validateCreateEthBalanceAlertSchema = Joi.object({
   status: Joi.string().valid(...Object.values(AlertRuleStatus)).required().messages({
     'string.empty':'Status is required'
   }),
-  thresholdValue: Joi.number().required().messages({
+  thresholdValue: Joi.any().required().messages({
     'number.empty':'Threshold value cannot be empty'
   }),
   notificationType: Joi.string().optional().messages({

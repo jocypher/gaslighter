@@ -2,33 +2,26 @@ import { NextFunction, Response } from "express";
 import { AuthRequest } from "../../../../../../core/middlewares/authMiddlewares";
 import { AlertType } from "../../../../../../db/entities/AlertType";
 import appConstants from "../../../../../../core/constants/appConstants";
-import { AlertRule } from "../../../../../../db/entities/AlertRule";
-import { ethers, id } from "ethers";
 import { AlertRuleStatus } from "../../../../../../core/enums/alertRuleStatus";
+import { AlertRule } from "../../../../../../db/entities/AlertRule";
 import { User } from "../../../../../../db/entities/User";
 import { NotificationType } from "../../../../../../core/enums/notificationType";
 
-async function CreateEthBalanceAlertController(
+async function IncomingEthAlertController(
   req: AuthRequest,
   res: Response,
   next: NextFunction,
 ) {
   try {
     const {
-      alertType,
       targetAddress,
       status,
-      thresholdValue,
+      alertType,
       notificationType,
+      thresholdValue,
     } = req.body;
     const userId = req.user!.id;
 
-    if (!ethers.isAddress(targetAddress)) {
-      return res.status(appConstants.statusCode.UNAUTHORIZED).json({
-        success: false,
-        message: `Invalid wallet Address ${targetAddress}`,
-      });
-    }
     const alertTypeRecord = await AlertType.findOne({
       where: {
         type: alertType,
@@ -37,7 +30,7 @@ async function CreateEthBalanceAlertController(
     if (!alertTypeRecord) {
       return res.status(appConstants.statusCode.SUCCESS).json({
         success: false,
-        message: `Alert Type  ${alertType} doesn't exist`,
+        messages: "Alert rule Type not fund",
       });
     }
 
@@ -59,21 +52,15 @@ async function CreateEthBalanceAlertController(
           message: "Invalid condition. Use: greater_than, less_than, or equals",
         });
     }
-    try {
-      BigInt(thresholdValue);
-    } catch {
-      return res.status(appConstants.statusCode.SUCCESS).json({
-        success: false,
-        message: "Invalid threshold value. Must be a valid number",
-      });
-    }
 
     const user = await User.findOne({
-      where: { id: userId },
+      where: {
+        id: userId,
+      },
     });
 
     if (!user) {
-      return res.status(appConstants.statusCode.NOTFOUND).json({
+      return res.status(appConstants.statusCode.SUCCESS).json({
         success: false,
         message: "User not found",
       });
@@ -89,6 +76,7 @@ async function CreateEthBalanceAlertController(
     alertRule.isActive = true;
 
     await alertRule.save();
+
     return res.status(appConstants.statusCode.SUCCESS).json({
       success: true,
       data: {
@@ -104,6 +92,3 @@ async function CreateEthBalanceAlertController(
     next(error);
   }
 }
-
-
-export default CreateEthBalanceAlertController

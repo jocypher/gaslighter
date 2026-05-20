@@ -33,10 +33,9 @@ export class EthereumListenerService{
                 }
 
             })
-            console.log(rules.length)
+          
             for(const rule of rules){
-                console.log(rule)
-                console.log(`New block: ${blockNumber}`);
+                
                 await this.checkBalanceRule(rule)
             }
         })
@@ -61,10 +60,11 @@ export class EthereumListenerService{
                     break
 
             }
-
+            console.log("One match", matches);
             if(matches){
                 // send email
                 console.log(`Alert triggered for rule ${rule.id}`);
+                console.log("One match", matches)
                 // update alert history
                 const alertHistory =  AlertHistory.create({
                     alertRule: {id: rule.id},
