@@ -1,12 +1,10 @@
 import { NextFunction, Response } from "express";
 import { AuthRequest } from "../../../../../../core/middlewares/authMiddlewares";
-import { AlertType } from "../../../../../../db/entities/AlertType";
 import appConstants from "../../../../../../core/constants/appConstants";
 import { AlertRule } from "../../../../../../db/entities/AlertRule";
-import { ethers, id } from "ethers";
-import { AlertRuleStatus } from "../../../../../../core/enums/alertRuleStatus";
-import { User } from "../../../../../../db/entities/User";
 import { NotificationType } from "../../../../../../core/enums/notificationType";
+import { AlertRuleResponseDto } from "../../../../../../core/utils/sharedDto";
+import { AlertRuleValidations } from "../../../../../../core/utils/alertRuleValidation";
 
 async function CreateEthBalanceAlertController(
   req: AuthRequest,
@@ -23,87 +21,33 @@ async function CreateEthBalanceAlertController(
     } = req.body;
     const userId = req.user!.id;
 
-    if (!ethers.isAddress(targetAddress)) {
-      return res.status(appConstants.statusCode.UNAUTHORIZED).json({
-        success: false,
-        message: `Invalid wallet Address ${targetAddress}`,
-      });
-    }
-    const alertTypeRecord = await AlertType.findOne({
-      where: {
-        type: alertType,
-      },
-    });
-    if (!alertTypeRecord) {
-      return res.status(appConstants.statusCode.SUCCESS).json({
-        success: false,
-        message: `Alert Type  ${alertType} doesn't exist`,
-      });
-    }
+    AlertRuleValidations.validateEthereumAddress(targetAddress);
 
-    let alertRuleStatus: AlertRuleStatus;
+    const alertTypeRecord =
+      await AlertRuleValidations.findAlertTypeRecord(alertType);
 
-    switch (status) {
-      case "greater_than":
-        alertRuleStatus = AlertRuleStatus.GREATER_THAN;
-        break;
-      case "less_than":
-        alertRuleStatus = AlertRuleStatus.LESS_THAN;
-        break;
-      case "equals":
-        alertRuleStatus = AlertRuleStatus.EQUALS;
-        break;
-      default:
-        return res.status(appConstants.statusCode.SUCCESS).json({
-          success: false,
-          message: "Invalid condition. Use: greater_than, less_than, or equals",
-        });
-    }
-    try {
-      BigInt(thresholdValue);
-    } catch {
-      return res.status(appConstants.statusCode.SUCCESS).json({
-        success: false,
-        message: "Invalid threshold value. Must be a valid number",
-      });
-    }
-
-    const user = await User.findOne({
-      where: { id: userId },
-    });
-
-    if (!user) {
-      return res.status(appConstants.statusCode.NOTFOUND).json({
-        success: false,
-        message: "User not found",
-      });
-    }
+    const alertRuleStatus = AlertRuleValidations.convertAlertStatusEnum(status);
+    const validThresholdValue =
+      AlertRuleValidations.validateThresholdValue(thresholdValue);
+    const user = await AlertRuleValidations.findUser(userId);
 
     const alertRule = new AlertRule();
     alertRule.user = user;
     alertRule.alertType = alertTypeRecord;
     alertRule.targetAddress = targetAddress.toLowerCase();
     alertRule.alertRuleStatus = alertRuleStatus;
-    alertRule.thresholdValue = BigInt(thresholdValue);
+    alertRule.thresholdValue = validThresholdValue;
     alertRule.notificationType = notificationType || NotificationType.EMAIL;
     alertRule.isActive = true;
 
     await alertRule.save();
     return res.status(appConstants.statusCode.SUCCESS).json({
       success: true,
-      data: {
-        id: alertRule.id,
-        targetAddress: alertRule.targetAddress,
-        condition: status,
-        thresholdValue: thresholdValue,
-        notificationType: alertRule.notificationType,
-        isActive: alertRule.isActive,
-      },
+      data: AlertRuleResponseDto.from(alertRule),
     });
   } catch (error) {
     next(error);
   }
 }
 
-
-export default CreateEthBalanceAlertController
+export default CreateEthBalanceAlertController;

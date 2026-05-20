@@ -25,3 +25,5 @@ feat: update login and registration controllers; add async password validation a
 feat: refactor change password functionality; update controller and validation schema exports
 
 feat: implement Ethereum alert functionality; add controllers, validations, and seeding for alert types
+
+feat: refactor incoming Ethereum alert controller; streamline validations and response DTO integration

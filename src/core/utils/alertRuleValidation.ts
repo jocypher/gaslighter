@@ -10,17 +10,17 @@ export class AlertRuleValidations {
     }
   }
 
-  static async findAlertType(ruleType: string): Promise<AlertType> {
-    const alertType = await AlertType.findOne({
+  static async findAlertTypeRecord(alertType: string): Promise<AlertType> {
+    const alertTypeRecord = await AlertType.findOne({
       where: {
-        type: ruleType,
+        type: alertType,
       },
     });
-    if (!alertType) {
+    if (!alertTypeRecord) {
       throw new Error("Alert type not found");
     }
 
-    return alertType;
+    return alertTypeRecord;
   }
 
   static convertAlertStatusEnum(status: string): AlertRuleStatus {
