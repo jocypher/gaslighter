@@ -21,9 +21,10 @@ async function IncomingEthAlertController(
       thresholdValue,
     } = req.body;
     const userId = req.user!.id;
-
+    
     AlertRuleValidations.validateEthereumAddress(targetAddress)
     const alertTypeRecord = await AlertRuleValidations.findAlertTypeRecord(alertType)
+    console.log(alertTypeRecord)
     const alertRuleStatus = AlertRuleValidations.convertAlertStatusEnum(status)
     const user = await AlertRuleValidations.findUser(userId)
     const threshold = AlertRuleValidations.validateThresholdValue(thresholdValue)

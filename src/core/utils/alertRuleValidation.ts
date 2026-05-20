@@ -11,6 +11,7 @@ export class AlertRuleValidations {
   }
 
   static async findAlertTypeRecord(alertType: string): Promise<AlertType> {
+    
     const alertTypeRecord = await AlertType.findOne({
       where: {
         type: alertType,
@@ -19,6 +20,7 @@ export class AlertRuleValidations {
     if (!alertTypeRecord) {
       throw new Error("Alert type not found");
     }
+    console.log("The alertType record is", alertTypeRecord)
 
     return alertTypeRecord;
   }

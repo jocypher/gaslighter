@@ -16,14 +16,9 @@ feat: add authentication and profile retrieval features
 - Enhanced error handling and response formatting in controllers.
 
 J00003
-feat: implement user profile management and authentication features; add password change functionality
-
-feat: add Ethereum wallet balance alert functionality; implement alert creation, validation, and listener service
-
-feat: update login and registration controllers; add async password validation and access token storage
-
-feat: refactor change password functionality; update controller and validation schema exports
-
-feat: implement Ethereum alert functionality; add controllers, validations, and seeding for alert types
-
-feat: refactor incoming Ethereum alert controller; streamline validations and response DTO integration
+-feat: implement user profile management and authentication features; add password change functionality.
+-feat: add Ethereum wallet balance alert functionality; implement alert creation, validation, and listener service.
+-feat: update login and registration controllers; add async password validation and access token storage.
+-feat: refactor change password functionality; update controller and validation schema exports.
+-feat: implement Ethereum alert functionality; add controllers, validations, and seeding for alert types.
+-feat: refactor incoming Ethereum alert controller; streamline validations and response DTO integration

@@ -23,7 +23,7 @@ export const validateIncomingEthAlertSchema = Joi.object({
     .messages({
       "string.empty": "status cannot be empty ",
     }),
-  ruleType: Joi.string().required().messages({
+  alertType: Joi.string().required().messages({
     "string.any": "Rule type is required",
   }),
   notificationType: Joi.string()

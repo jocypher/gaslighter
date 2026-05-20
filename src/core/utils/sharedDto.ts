@@ -5,7 +5,7 @@ export class AlertRuleResponseDto{
     id: number
     targetAddress: string
     status: string
-    thresholdValue: bigint
+    thresholdValue: string
     notificationType: NotificationType
     isActive: boolean
 
@@ -14,7 +14,7 @@ export class AlertRuleResponseDto{
             id: alertRule.id,
             targetAddress: alertRule.targetAddress,
             status: alertRule.alertRuleStatus,
-            thresholdValue: alertRule.thresholdValue,
+            thresholdValue: String(alertRule.thresholdValue),
             notificationType: alertRule.notificationType,
             isActive: alertRule.isActive
         }
