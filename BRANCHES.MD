@@ -22,3 +22,5 @@ J00003
 -feat: refactor change password functionality; update controller and validation schema exports.
 -feat: implement Ethereum alert functionality; add controllers, validations, and seeding for alert types.
 -feat: refactor incoming Ethereum alert controller; streamline validations and response DTO integration
+-feat: enhance Ethereum alert functionality; add incoming ETH alert route, validation, and listener service
+feat: implement Ethereum alert processing; add handlers for incoming ETH and wallet balance rules
