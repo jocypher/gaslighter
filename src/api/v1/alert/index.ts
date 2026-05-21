@@ -4,11 +4,14 @@ import validate from "../../../core/middlewares/joiMiddlewares";
 import { validateCreateEthBalanceAlertSchema } from "./createAlert/walletBalanceAlert/validation";
 import CreateEthBalanceAlertController from "./createAlert/walletBalanceAlert/controllers/ethBalanceAlertController";
 import { validateIncomingEthAlertSchema } from "./createAlert/incomingEthAlert/validation";
-import ListAlertsControllers  from "./listAlerts/controllers/listAlertsControllers";
+import ListAlertsControllers from "./listAlerts/controllers/listAlertsControllers";
 import { validateListAlertSchema } from "./listAlerts/validation";
 import { validateGetAlertById } from "./getAlertById/validation";
 import GetAlertByIdController from "./getAlertById/controllers/getAlertByIdController";
 import CreateIncomingEthAlertController from "./createAlert/incomingEthAlert/controllers/incomingEthAlertController";
+import { validateUpdateAlertSchema } from "./updateAlert/validation";
+import UpdateAlertController from "./updateAlert/controllers/updateAlertControllers";
+import { validateDeleteParamId } from "./deleteAlert/validations";
 
 const router = Router();
 
@@ -40,4 +43,17 @@ router.get(
   GetAlertByIdController,
 );
 
+router.patch(
+  "/:id",
+  authenticate,
+  validate(validateGetAlertById, "params"),
+  validate(validateUpdateAlertSchema),
+  UpdateAlertController,
+);
+
+router.delete(
+  "/:id",
+  authenticate,
+  validate(validateDeleteParamId, "params")
+)
 export default router;

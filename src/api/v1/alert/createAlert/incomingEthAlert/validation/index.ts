@@ -2,16 +2,8 @@ import { getAddress } from "ethers";
 import Joi from "joi";
 import { AlertRuleStatus } from "../../../../../../core/enums/alertRuleStatus";
 import { NotificationType } from "../../../../../../core/enums/notificationType";
+import { addressValidator } from "../../../../../../core/utils/validators";
 
-const addressValidator = (value: any, helpers: any) => {
-  try {
-    if (getAddress(value)) {
-      return value;
-    }
-  } catch (err) {
-    return helpers.error("any.invalid");
-  }
-};
 
 export const validateIncomingEthAlertSchema = Joi.object({
   targetAddress: Joi.string()
