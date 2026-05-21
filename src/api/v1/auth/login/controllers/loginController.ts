@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { User } from "../../../../../db/entities/User";
 import appConstants from "../../../../../core/constants/appConstants";
 import LoginRequest from "../interfaces";
+import { JwtService } from "../../../../../core/services/jwt/jwtService";
 
 export async function LoginController(
   req: Request,
@@ -10,12 +11,12 @@ export async function LoginController(
 ) {
   try {
     const { email, password } = req.body as LoginRequest;
-    //todo:Joi validation on the schema
     const user = await User.findOne({
       where: {
         email: email,
       },
       select: {
+        id: true,
         email: true,
         password: true,
       },
@@ -28,7 +29,7 @@ export async function LoginController(
       });
     }
 
-    const validatePassword = user.validatePassword(password);
+    const validatePassword = await user.validatePassword(password);
 
     if (!validatePassword) {
       return res.status(appConstants.statusCode.UNAUTHORIZED).json({
@@ -37,9 +38,16 @@ export async function LoginController(
       });
     }
 
+
+    const accessToken = JwtService.generateToken({
+      userId: user.id,
+      email: user.email,
+    });
+
     return res.status(appConstants.statusCode.SUCCESS).json({
       success: true,
       message: "Logged In successfully",
+      accessToken
     });
   } catch (error) {
     next(error);

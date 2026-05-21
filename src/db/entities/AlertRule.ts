@@ -10,9 +10,7 @@ export class AlertRule extends BaseEntity{
   @PrimaryGeneratedColumn("increment")
   id: number;
 
-  @ManyToOne(() => AlertType, (type) => type.alertRules, {
-    eager: true,
-  })
+  @ManyToOne(() => AlertType, (type) => type.alertRules)
   @JoinColumn({ name: "alert_type_id" })
   alertType: AlertType;
 
@@ -21,6 +19,7 @@ export class AlertRule extends BaseEntity{
   })
   @JoinColumn({ name: "user_id" })
   user: User;
+
   @Column({ nullable: false })
   targetAddress: string;
 
@@ -37,7 +36,6 @@ export class AlertRule extends BaseEntity{
 
   @Column({
     type: "bigint",
-    default: 0,
   })
   thresholdValue: bigint;
 

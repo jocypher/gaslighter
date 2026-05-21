@@ -10,7 +10,7 @@ export class User extends BaseEntity{
   id: string;
 
   @Column("varchar", { unique: true, length: 100, nullable: false })
-  userName: string;
+  username: string;
 
   @Column({ unique: true, nullable: false })
   email: string;
@@ -27,10 +27,13 @@ export class User extends BaseEntity{
   @UpdateDateColumn({ nullable: true })
   lastUpdate: Date;
 
+  @Column({nullable: true})
+  accessToken: string
+
   @Column({default:false, type:"boolean"})
   isDeleted: boolean
 
-  @Column({type:"date"})
+  @Column({type:"date", nullable: true})
   deletedAt:Date
 
   @BeforeInsert()
