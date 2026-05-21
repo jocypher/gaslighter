@@ -7,7 +7,7 @@ import { AlertRuleValidations } from "../../../../../../core/utils/alertRuleVali
 import { AlertRuleResponseDto } from "../../../../../../core/utils/sharedDto";
 
 
-async function IncomingEthAlertController(
+async function CreateIncomingEthAlertController(
   req: AuthRequest,
   res: Response,
   next: NextFunction,
@@ -49,4 +49,4 @@ async function IncomingEthAlertController(
   }
 }
 
-export default IncomingEthAlertController
+export default CreateIncomingEthAlertController

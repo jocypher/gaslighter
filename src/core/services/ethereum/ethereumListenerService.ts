@@ -1,14 +1,9 @@
 import { ethers } from "ethers";
 import providers from "../../providers";
 import { AlertRule } from "../../../db/entities/AlertRule";
-import { AlertType } from "../../../db/entities/AlertType";
-import { AlertTypeNames } from "../../constants/alertTypeNames";
-import { AlertRuleStatus } from "../../enums/alertRuleStatus";
-import { match } from "node:assert";
-import { AlertHistory } from "../../../db/entities/AlertHistory";
-import { AlertHistoryStatus } from "../../enums/alertHistoryStatus";
 import processWalletBalanceRules from "./WalletBalanceHandler";
 import processIncomingEthRules from "./IncomingEthHandler";
+import appConstants from "../../constants/appConstants";
 export class EthereumListenerService {
   private provider: ethers.WebSocketProvider;
 
@@ -33,13 +28,13 @@ export class EthereumListenerService {
         const incomingEthRules = rules.filter(
           (rule) =>
             rule.alertType.type ===
-            AlertTypeNames.INCOMING_ETH
+            appConstants.alertTypeNames.INCOMING_ETH
         );
 
         const walletBalanceRules = rules.filter(
           (rule) =>
             rule.alertType.type ===
-            AlertTypeNames.WALLET_BALANCE
+            appConstants.alertTypeNames.WALLET_BALANCE
         );
         await processIncomingEthRules(
           incomingEthRules,

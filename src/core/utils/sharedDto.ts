@@ -8,6 +8,7 @@ export class AlertRuleResponseDto{
     thresholdValue: string
     notificationType: NotificationType
     isActive: boolean
+    createdBy: string
 
     static from(alertRule: AlertRule):AlertRuleResponseDto{
         return {
@@ -16,7 +17,9 @@ export class AlertRuleResponseDto{
             status: alertRule.alertRuleStatus,
             thresholdValue: String(alertRule.thresholdValue),
             notificationType: alertRule.notificationType,
-            isActive: alertRule.isActive
+            isActive: alertRule.isActive,
+            createdBy: alertRule.user.username,
+            
         }
     }
 }

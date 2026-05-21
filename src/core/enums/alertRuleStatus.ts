@@ -5,4 +5,3 @@ export enum AlertRuleStatus{
 
 }
 
-// - rule_type (wallet_balance, contract_call, transaction_from, gas_price)

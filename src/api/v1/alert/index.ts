@@ -3,31 +3,41 @@ import { authenticate } from "../../../core/middlewares/authMiddlewares";
 import validate from "../../../core/middlewares/joiMiddlewares";
 import { validateCreateEthBalanceAlertSchema } from "./createAlert/walletBalanceAlert/validation";
 import CreateEthBalanceAlertController from "./createAlert/walletBalanceAlert/controllers/ethBalanceAlertController";
-import GetEthWalletBalance from "../../../core/chain/eth/getWalletBalance/getWalletBalance";
-import { valid } from "joi";
 import { validateIncomingEthAlertSchema } from "./createAlert/incomingEthAlert/validation";
-import IncomingEthAlertController from "./createAlert/incomingEthAlert/controllers/incomingEthAlertController";
+import ListAlertsControllers  from "./listAlerts/controllers/listAlertsControllers";
+import { validateListAlertSchema } from "./listAlerts/validation";
+import { validateGetAlertById } from "./getAlertById/validation";
+import GetAlertByIdController from "./getAlertById/controllers/getAlertByIdController";
+import CreateIncomingEthAlertController from "./createAlert/incomingEthAlert/controllers/incomingEthAlertController";
 
 const router = Router();
 
 router.post(
-  "/rules/eth-balance",
+  "/eth-balance",
   authenticate,
   validate(validateCreateEthBalanceAlertSchema),
   CreateEthBalanceAlertController,
 );
 
 router.post(
-  "/rules/incoming-eth",
+  "/incoming-eth",
   authenticate,
   validate(validateIncomingEthAlertSchema),
-  IncomingEthAlertController
-)
+  CreateIncomingEthAlertController,
+);
+
 router.get(
-    "/eth-balance",
-    authenticate,
-    GetEthWalletBalance
-)
+  "/",
+  authenticate,
+  validate(validateListAlertSchema, "query"),
+  ListAlertsControllers,
+);
 
+router.get(
+  "/:id",
+  authenticate,
+  validate(validateGetAlertById, "params"),
+  GetAlertByIdController,
+);
 
-export default router
+export default router;

@@ -7,7 +7,10 @@ export async function seedAlertTypes() {
     "WALLET_BALANCE",
     "GAS_PRICE",
     "INCOMING_ETH",
-    "OUTGOING_ETH"
+    "OUTGOING_ETH",
+    "CONTRACT_INTERACTION",
+    "TOKEN_TRANSFER",
+    "LARGE_TRANSACTION"
   ];
 
   for (const type of alertTypes) {
@@ -23,3 +26,4 @@ export async function seedAlertTypes() {
     }
   }
 }
+
