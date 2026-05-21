@@ -26,3 +26,4 @@ feat: refactor incoming Ethereum alert controller; streamline validations and re
 feat: enhance Ethereum alert functionality; add incoming ETH alert route, validation, and listener service
 feat: implement Ethereum alert processing; add handlers for incoming ETH and wallet balance rules
 feat: implement alert management features; add update and delete alert controllers, validations, and schemas
+feat: implement outgoing ETH alert processing; add handler for outgoing ETH alerts with recent alert checks

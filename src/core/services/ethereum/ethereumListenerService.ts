@@ -1,9 +1,10 @@
 import { ethers } from "ethers";
 import providers from "../../providers";
 import { AlertRule } from "../../../db/entities/AlertRule";
-import processWalletBalanceRules from "./WalletBalanceHandler";
-import processIncomingEthRules from "./IncomingEthHandler";
 import appConstants from "../../constants/appConstants";
+import { processWalletBalanceAlert } from "./WalletBalanceHandler";
+import { processIncomingEthAlert } from "./IncomingEthHandler";
+import { processOutgoingEthAlert } from "./outgoingEthHandler";
 export class EthereumListenerService {
   private provider: ethers.WebSocketProvider;
 
@@ -16,7 +17,7 @@ export class EthereumListenerService {
 
     this.provider.on("block", async (blockNumber) => {
       try {
-        const rules = await AlertRule.find({
+        const alerts = await AlertRule.find({
           where: {
             isActive: true,
           },
@@ -25,25 +26,24 @@ export class EthereumListenerService {
             alertType: true,
           },
         });
-        const incomingEthRules = rules.filter(
-          (rule) =>
-            rule.alertType.type ===
+        const incomingEthAlerts = alerts.filter(
+          (alert) =>
+            alert.alertType.type ===
             appConstants.alertTypeNames.INCOMING_ETH
         );
 
-        const walletBalanceRules = rules.filter(
-          (rule) =>
-            rule.alertType.type ===
+        const walletBalanceAlerts = alerts.filter(
+          (alert) =>
+            alert.alertType.type ===
             appConstants.alertTypeNames.WALLET_BALANCE
         );
-        await processIncomingEthRules(
-          incomingEthRules,
-          blockNumber
-        );
+        const outgoingEthAlerts = alerts.filter((alert)=> alert.alertType.type === appConstants.alertTypeNames.OUTGOING_ETH)
 
-        await processWalletBalanceRules(
-          walletBalanceRules
-        );
+        await processIncomingEthAlert(incomingEthAlerts, blockNumber);
+
+        await processWalletBalanceAlert(walletBalanceAlerts);
+        await processOutgoingEthAlert(blockNumber, outgoingEthAlerts);
+
       } catch (error) {
         console.error(error);
       }
