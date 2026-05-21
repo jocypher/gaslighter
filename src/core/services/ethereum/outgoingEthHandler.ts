@@ -1,45 +1,43 @@
 import { ethers } from "ethers";
+import { AlertHistory } from "../../../db/entities/AlertHistory";
 import { AlertRule } from "../../../db/entities/AlertRule";
 import providers from "../../providers";
-import { AlertHistory } from "../../../db/entities/AlertHistory";
 import { AlertHistoryStatus } from "../../enums/alertHistoryStatus";
 import { MoreThan } from "typeorm";
 
-export async function processIncomingEthAlert(
-  alerts: AlertRule[],
+export async function processOutgoingEthAlert(
   blockNumber: number,
+  alerts: AlertRule[],
 ) {
   try {
     const block = await providers.ethereumWs.getBlock(blockNumber, true);
-
-    if (!block?.transactions) return;
 
     const addressMap = new Map<string, AlertRule[]>();
 
     for (const alert of alerts) {
       const address = alert.targetAddress.toLowerCase();
-
       if (!addressMap.has(address)) {
         addressMap.set(address, []);
       }
-
       addressMap.get(address)?.push(alert);
     }
 
-    for (const txHash of block.transactions) {
-      const fullTx = await providers.ethereumWs.getTransaction(
-        txHash as string,
-      );
+    if (!block || !block.transactions) {
+      throw new Error("Error processing: no block available");
+    }
 
-      if (!fullTx?.to) continue;
+    for (const tx of block.transactions) {
+      const fullTx = await providers.ethereumWs.getTransaction(tx);
 
-      const targetAddress = fullTx.to.toLowerCase();
+      if (!fullTx?.from) {
+        throw new Error("No address found");
+      }
+      const targetAddress = fullTx.from.toLowerCase();
 
       const matchedAlerts = addressMap.get(targetAddress);
 
       if (!matchedAlerts) continue;
 
-      // notify all users monitoring this wallet
       for (const alert of matchedAlerts) {
         const recentAlert = await AlertHistory.findOne({
           where: {
@@ -55,9 +53,10 @@ export async function processIncomingEthAlert(
           );
           continue;
         }
-        console.log(`Sending incoming ETH alert to user ${alert.user.id}`);
+        console.log(`Sending Outgoing ETH alert to user ${alert.user.id}`);
 
         const alertHistory = new AlertHistory();
+
         const data = {
           from: fullTx.from,
           to: fullTx.to,
@@ -75,6 +74,6 @@ export async function processIncomingEthAlert(
       }
     }
   } catch (error) {
-    console.error(error);
+    console.log(error);
   }
 }
