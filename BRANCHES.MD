@@ -27,3 +27,7 @@ feat: enhance Ethereum alert functionality; add incoming ETH alert route, valida
 feat: implement Ethereum alert processing; add handlers for incoming ETH and wallet balance rules
 feat: implement alert management features; add update and delete alert controllers, validations, and schemas
 feat: implement outgoing ETH alert processing; add handler for outgoing ETH alerts with recent alert checks
+
+
+J00004
+feat: implement create ETH alert functionality; add controller and validation schema, update alert router

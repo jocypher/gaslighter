@@ -36,6 +36,7 @@ export class AlertRule extends BaseEntity{
 
   @Column({
     type: "bigint",
+    nullable:true
   })
   thresholdValue: bigint;
 

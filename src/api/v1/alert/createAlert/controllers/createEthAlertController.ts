@@ -1,23 +1,24 @@
 import { NextFunction, Response } from "express";
-import { AuthRequest } from "../../../../../../core/middlewares/authMiddlewares";
-import appConstants from "../../../../../../core/constants/appConstants";
-import { AlertRule } from "../../../../../../db/entities/AlertRule";
-import { NotificationType } from "../../../../../../core/enums/notificationType";
-import { AlertRuleResponseDto } from "../../../../../../core/utils/sharedDto";
-import { AlertRuleValidations } from "../../../../../../core/utils/alertRuleValidation";
+import { AuthRequest } from "../../../../../core/middlewares/authMiddlewares";
+import { AlertRuleValidations } from "../../../../../core/utils/alertRuleValidation";
+import { AlertRule } from "../../../../../db/entities/AlertRule";
+import { NotificationType } from "../../../../../core/enums/notificationType";
+import appConstants from "../../../../../core/constants/appConstants";
+import { AlertRuleResponseDto } from "../../../../../core/utils/sharedDto";
 
-async function CreateEthBalanceAlertController(
+async function CreateEthAlertController(
   req: AuthRequest,
   res: Response,
   next: NextFunction,
 ) {
   try {
     const {
-      alertType,
       targetAddress,
       status,
-      thresholdValue,
+      alertType,
       notificationType,
+      thresholdValue,
+      webhookUrl,
     } = req.body;
     const userId = req.user!.id;
 
@@ -25,22 +26,34 @@ async function CreateEthBalanceAlertController(
 
     const alertTypeRecord =
       await AlertRuleValidations.findAlertTypeRecord(alertType);
+ 
 
     const alertRuleStatus = AlertRuleValidations.convertAlertStatusEnum(status);
-    const validThresholdValue =
-      AlertRuleValidations.validateThresholdValue(thresholdValue);
+
     const user = await AlertRuleValidations.findUser(userId);
+    let validatedThreshold: bigint | null = null;
+
+    if (thresholdValue !== undefined && thresholdValue !== null) {
+      validatedThreshold =
+        AlertRuleValidations.validateThresholdValue(thresholdValue);
+    }
+
+    if (notificationType === NotificationType.WEBHOOK && !webhookUrl) {
+      throw new Error("Webhook URL is required");
+    }
 
     const alertRule = new AlertRule();
     alertRule.user = user;
     alertRule.alertType = alertTypeRecord;
     alertRule.targetAddress = targetAddress.toLowerCase();
     alertRule.alertRuleStatus = alertRuleStatus;
-    alertRule.thresholdValue = validThresholdValue;
     alertRule.notificationType = notificationType || NotificationType.EMAIL;
     alertRule.isActive = true;
+    alertRule.thresholdValue = validatedThreshold!;
+    alertRule.webhookUrl = webhookUrl;
 
     await alertRule.save();
+
     return res.status(appConstants.statusCode.SUCCESS).json({
       success: true,
       data: AlertRuleResponseDto.from(alertRule),
@@ -50,4 +63,4 @@ async function CreateEthBalanceAlertController(
   }
 }
 
-export default CreateEthBalanceAlertController;
+export default CreateEthAlertController;
