@@ -39,7 +39,6 @@ export async function processIncomingEthAlert(
 
       if (!matchedAlerts) continue;
 
-      // notify all users monitoring this wallet
       for (const alert of matchedAlerts) {
         const recentAlert = await AlertHistory.findOne({
           where: {

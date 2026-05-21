@@ -16,32 +16,35 @@ export default async function ListAlertsControllers(
     const limit = Number(req.query.limit) || 10;
     const skip = (page - 1) * limit;
 
-    let where: FindOptionsWhere<AlertRule> | FindOptionsWhere<AlertRule>[] = {};
+    let where: FindOptionsWhere<AlertRule> | FindOptionsWhere<AlertRule>[] = {
+      isActive: true,
+    };
 
     if (query) {
+      const trimmedQuery = `%${query}%`.trim();
       where = [
         {
-          alertType: ILike(query),
+          alertType: ILike(trimmedQuery),
         },
-        { targetAddress: ILike(query) },
-        { isActive: true },
+        { targetAddress: ILike(trimmedQuery) },
       ];
     }
-    const alertRules = await AlertRule.find({
-      where: where,
+    const [alertRules, total] = await AlertRule.findAndCount({
+      where,
       relations: {
         user: true,
         alertHistories: true,
       },
 
       skip: skip,
-      take: page,
+      take: limit,
     });
 
     if (alertRules.length == 0) {
       return res.status(appConstants.statusCode.SUCCESS).json({
         success: false,
-        message: "User currently has not Alert rules",
+        message: "No alert rules found",
+        data: [],
       });
     }
     const response = alertRules.map((alertRule) =>
@@ -53,7 +56,8 @@ export default async function ListAlertsControllers(
       pageInfo: {
         page,
         limit,
-        skip,
+        total,
+        totalPages: Math.ceil(total / limit),
       },
     });
   } catch (error) {
