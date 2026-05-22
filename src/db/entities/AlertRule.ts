@@ -26,7 +26,7 @@ export class AlertRule extends BaseEntity{
   @Column({
     type: "enum",
     enum: AlertRuleStatus,
-    default: AlertRuleStatus.EQUALS,
+    nullable:true
   })
   alertRuleStatus: AlertRuleStatus;
 

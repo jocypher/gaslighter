@@ -7,7 +7,7 @@ import { UpdateProfileSchema } from "./updateProfile/validation";
 
 const router = Router();
 
-router.get("/me", authenticate, GetProfileController);
+router.get("/", authenticate, GetProfileController);
 
 router.put(
   "/update",

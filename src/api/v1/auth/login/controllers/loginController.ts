@@ -38,9 +38,10 @@ export async function LoginController(
       });
     }
 
+    console.log(user)
 
     const accessToken = JwtService.generateToken({
-      userId: user.id,
+      id: user.id,
       email: user.email,
     });
 

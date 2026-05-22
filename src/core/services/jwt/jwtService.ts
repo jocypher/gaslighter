@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken"
 import envConstants from "../../constants/envConstants"
 
 interface IJwtPayLoad {
-    userId: string,
+    id: string,
     email:string
 }
 export class JwtService{

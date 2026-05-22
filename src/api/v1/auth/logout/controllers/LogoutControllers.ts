@@ -13,8 +13,7 @@ async function LogoutController(req:AuthRequest,res:Response,next:NextFunction) 
                 id: id 
             },
             select:{
-                id: true,
-                accessToken:true
+                id: true
             }
         })
         if(!user){
@@ -23,7 +22,6 @@ async function LogoutController(req:AuthRequest,res:Response,next:NextFunction) 
                 message:"User not found"
             })
         }
-        user.accessToken = ""
 
         return res.status(appConstants.statusCode.SUCCESS).json({
             success:false,
