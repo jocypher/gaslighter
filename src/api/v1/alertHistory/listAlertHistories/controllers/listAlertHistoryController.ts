@@ -22,29 +22,25 @@ export default async function ListAlertHistoryController(
       | FindOptionsWhere<AlertHistory>[] = {
       status: AlertHistoryStatus.SENT,
     };
+    const qb = AlertHistory.createQueryBuilder("alertHistory")
+      .leftJoin("alertHistory.alertRule", "alertRule")
+      .where("alert.status= :status", {
+        status: AlertHistoryStatus.SENT,
+      });
 
     if (query) {
-      const trimmedQuery = `%${query}%`.trim();
-      where = [
-        {
-          triggeredAt: ILike(new Date(trimmedQuery)),
-        },
-      ];
+      const trimmedQuery = `%${query.trim()}%`;
+      qb.andWhere(`
+        (
+        "alertHistory"."triggeredAt" ILIKE :search
+        OR
+        "alertHistory"."eventData" ILIKE :search
+        )
+        `,{
+          search: trimmedQuery
+        })
     }
-    const [alertHistories, total] = await AlertHistory.findAndCount({
-      where,
-      relations: {
-        alertRule: true,
-      },
-      select: {
-        alertRule: true,
-        triggeredAt: true,
-        eventData: true,
-        deliveredAt: true,
-      },
-      skip: skip,
-      take: limit,
-    });
+    const [alertHistories, total] = await qb.skip(skip).take(limit).getManyAndCount()
 
     if (total == 0) {
       return res.status(appConstants.statusCode.SUCCESS).json({
@@ -52,7 +48,9 @@ export default async function ListAlertHistoryController(
         message: "No alert history available",
       });
     }
-    const alertHistoryResponse = alertHistories.map((alertHistory)=> AlertHistoryResponseDto.from(alertHistory))
+    const alertHistoryResponse = alertHistories.map((alertHistory) =>
+      AlertHistoryResponseDto.from(alertHistory),
+    );
     return res.status(appConstants.statusCode.SUCCESS).json({
       success: true,
       data: alertHistoryResponse,
