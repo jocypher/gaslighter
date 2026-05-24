@@ -26,6 +26,7 @@ export default async function GetAlertHistoryByIdController(
             message:"Alert history not found"
         })
     }
+    console.log(alertHistory)
     const alertHistoryResponse = AlertHistoryResponseDto.from(alertHistory)
 
     return res.status(appConstants.statusCode.SUCCESS).json({

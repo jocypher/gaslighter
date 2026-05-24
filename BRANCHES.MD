@@ -41,3 +41,5 @@ J00004
 feat: implement create ETH alert functionality; add controller and validation schema, update alert router
 
 feat: implement alert history listing functionality; add controller and DTO for alert history responses
+
+feat: update alert history retrieval; log alert history response and adjust pagination structure

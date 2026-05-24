@@ -64,8 +64,7 @@ export default async function ListAlertsControllers(
       pageInfo: {
         page,
         limit,
-        total,
-        totalPages: Math.ceil(total / limit),
+        total
       },
     });
   } catch (error) {
