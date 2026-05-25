@@ -7,7 +7,6 @@ feat: add dotenv support and refactor datasource options; implement alert and no
 feat: implement user authentication and account management; add alert entities and refactor datasource
 
 feat: add authentication and profile retrieval features
-
 - Added Joi for request validation and integrated it into the registration controller.
 - Implemented JWT for user authentication.
 - Introduced logging middleware using Pino for better request tracking.
@@ -18,12 +17,29 @@ feat: add authentication and profile retrieval features
 
 J00003
 feat: implement user profile management and authentication features; add password change functionality.
+
 feat: add Ethereum wallet balance alert functionality; implement alert creation, validation, and listener service.
+
 feat: update login and registration controllers; add async password validation and access token storage.
+
 feat: refactor change password functionality; update controller and validation schema exports.
+
 feat: implement Ethereum alert functionality; add controllers, validations, and seeding for alert types.
+
 feat: refactor incoming Ethereum alert controller; streamline validations and response DTO integration
+
 feat: enhance Ethereum alert functionality; add incoming ETH alert route, validation, and listener service
+
 feat: implement Ethereum alert processing; add handlers for incoming ETH and wallet balance rules
+
 feat: implement alert management features; add update and delete alert controllers, validations, and schemas
+
 feat: implement outgoing ETH alert processing; add handler for outgoing ETH alerts with recent alert checks
+
+
+J00004
+feat: implement create ETH alert functionality; add controller and validation schema, update alert router
+
+feat: implement alert history listing functionality; add controller and DTO for alert history responses
+
+feat: update alert history retrieval; log alert history response and adjust pagination structure

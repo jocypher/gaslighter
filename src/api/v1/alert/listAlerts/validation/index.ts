@@ -1,8 +1,7 @@
 import Joi from "joi";
 
 export const validateListAlertSchema = Joi.object({
-    query: Joi.string().required().messages({
-        "string.empty":"search query cannot be empty",
+    search: Joi.string().optional().messages({
         "string.any":"search query is required"
     }),
     page:Joi.number().required().messages({

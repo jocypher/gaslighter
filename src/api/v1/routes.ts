@@ -2,7 +2,8 @@
 import express from "express"
 import authRouter from "./auth/index"
 import alertRouter from "./alert/index"
-import profileRouter from "./profile/index"
+import profileRouter from "./profile"
+import alertHistoryRouter from "./alertHistory/index"
 const router = express.Router()
 
 
@@ -11,6 +12,8 @@ router.use("/auth",
 
 router.use("/profile", profileRouter)
 
-router.use("/alert", alertRouter)
+router.use("/alerts", alertRouter)
+
+router.use("/alert-history", alertHistoryRouter)
 
 export default router

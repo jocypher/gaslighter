@@ -11,6 +11,14 @@ export default async function GetProfileController(
 ) {
   try {
     const id = req.user?.id;
+    console.log(req?.user)
+    console.log(id)
+     if (!id) {
+       return res.status(401).json({
+         success: false,
+         message: "Invalid session",
+       });
+     }
 
     const user = await User.findOne({
       where: {
@@ -38,6 +46,6 @@ export default async function GetProfileController(
       data: userResponse,
     });
   } catch (error) {
-    next(error);
+    return next(error);
   }
 }

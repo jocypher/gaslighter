@@ -10,16 +10,30 @@ async function ChangePasswordController(
 ) {
   try {
     const id = req.user?.id;
+
+
+    if (!id) {
+      return res.status(401).json({
+        success: false,
+        message: "Invalid session",
+      });
+    }
     const { oldPassword, newPassword } = req.body;
+
+    console.log("OldPassword", oldPassword)
+    console.log("New Password", newPassword)
     const user = await User.findOne({
       where: {
         id: id!,
       },
-      select: {
-        id: true,
+      select:{
         password: true,
-      },
+        id:true,
+        email:true
+      }
     });
+
+    console.log(user)
 
     if (!user) {
       return res
@@ -27,7 +41,9 @@ async function ChangePasswordController(
         .json({ success: false, message: "User not found" });
     }
 
-    const isOldPasswordCorrect = await user.validatePassword(oldPassword);
+    const isOldPasswordCorrect = await user.validatePassword(oldPassword);;
+
+    console.log(`Is valid Old password: ${isOldPasswordCorrect}`)
 
     if (!isOldPasswordCorrect) {
       return res.status(appConstants.statusCode.UNAUTHORIZED).json({

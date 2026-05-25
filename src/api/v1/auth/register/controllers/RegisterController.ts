@@ -32,11 +32,10 @@ export default async function RegisterController(
     await createdUser.save();
 
     const accessToken = JwtService.generateToken({
-      userId: createdUser.id,
+      id: createdUser.id,
       email: createdUser.email,
     });
 
-    await User.update(createdUser.id, {accessToken: accessToken})
     
 
     return res.status(201).json({

@@ -1,32 +1,24 @@
 import { Router } from "express";
 import { authenticate } from "../../../core/middlewares/authMiddlewares";
 import validate from "../../../core/middlewares/joiMiddlewares";
-import { validateCreateEthBalanceAlertSchema } from "./createAlert/walletBalanceAlert/validation";
-import CreateEthBalanceAlertController from "./createAlert/walletBalanceAlert/controllers/ethBalanceAlertController";
-import { validateIncomingEthAlertSchema } from "./createAlert/incomingEthAlert/validation";
+
 import ListAlertsControllers from "./listAlerts/controllers/listAlertsControllers";
 import { validateListAlertSchema } from "./listAlerts/validation";
 import { validateGetAlertById } from "./getAlertById/validation";
 import GetAlertByIdController from "./getAlertById/controllers/getAlertByIdController";
-import CreateIncomingEthAlertController from "./createAlert/incomingEthAlert/controllers/incomingEthAlertController";
+
 import { validateUpdateAlertSchema } from "./updateAlert/validation";
 import UpdateAlertController from "./updateAlert/controllers/updateAlertControllers";
 import { validateDeleteParamId } from "./deleteAlert/validations";
+import { validateCreateEthAlertSchema } from "./createAlert/validation";
+import CreateEthAlertController from "./createAlert/controllers/createEthAlertController";
 
 const router = Router();
 
 router.post(
-  "/eth-balance",
-  authenticate,
-  validate(validateCreateEthBalanceAlertSchema),
-  CreateEthBalanceAlertController,
-);
-
-router.post(
-  "/incoming-eth",
-  authenticate,
-  validate(validateIncomingEthAlertSchema),
-  CreateIncomingEthAlertController,
+  "/",
+  validate(validateCreateEthAlertSchema),
+  CreateEthAlertController,
 );
 
 router.get(
@@ -51,9 +43,5 @@ router.patch(
   UpdateAlertController,
 );
 
-router.delete(
-  "/:id",
-  authenticate,
-  validate(validateDeleteParamId, "params")
-)
+router.delete("/:id", authenticate, validate(validateDeleteParamId, "params"));
 export default router;
