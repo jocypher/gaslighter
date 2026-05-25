@@ -43,3 +43,7 @@ feat: implement create ETH alert functionality; add controller and validation sc
 feat: implement alert history listing functionality; add controller and DTO for alert history responses
 
 feat: update alert history retrieval; log alert history response and adjust pagination structure
+
+
+J00005
+feat: integrate Redis for caching alert rules and types; implement Redis client and update alert type seeding

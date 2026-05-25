@@ -13,7 +13,16 @@ const appConstants = {
     CONTRACT_INTERACTION:"CONTRACT_INTERACTION",
     TOKEN_TRANSFER:"TOKEN_TRANSFER",
     LARGE_TRANSACTION:"LARGE_TRANSACTION"
+    },
+    CACHE_KEYS:{
+        ALERT_RULES: "ALERT_RULES",
+        ALERT_TYPE: "ALERT_TYPE"
+    },
+    CACHE_TTL:{
+        ALERT_RULE: 5 * 60,
+        ALERT_TYPE: 24 * 60 * 60,
     }
+    
 }
 
 export default appConstants
