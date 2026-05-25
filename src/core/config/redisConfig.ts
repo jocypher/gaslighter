@@ -1,9 +1,9 @@
 import { createClient } from "redis"
+import envConstants from "../constants/envConstants";
 
 const client = createClient({
   socket: {
-    host: process.env.REDIS_HOST,
-    port: Number(process.env.REDIS_PORT) || 6379,
+    ...envConstants.redisOptions,
     reconnectStrategy: (times) => Math.min(times * 50, 2000)
   },
 });

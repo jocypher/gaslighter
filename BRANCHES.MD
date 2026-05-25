@@ -47,3 +47,13 @@ feat: update alert history retrieval; log alert history response and adjust pagi
 
 J00005
 feat: integrate Redis for caching alert rules and types; implement Redis client and update alert type seeding
+
+feat: integrate BullMQ for handling incoming ETH alerts and refactor alert processing
+
+- Added BullMQ queues for incoming ETH, outgoing ETH, and wallet balance alerts.
+- Refactored IncomingEthHandler to use BullMQ for processing alerts.
+- Created utility functions for checking recent alerts and creating alert history.
+- Updated app and environment constants to include queue names and Redis options.
+- Modified EthereumListenerService to enqueue incoming ETH alerts.
+- Updated package.json and package-lock.json to include BullMQ and related dependencies.
+- Refactored Redis configuration to utilize environment constants.

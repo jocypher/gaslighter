@@ -3,9 +3,9 @@ import providers from "../../providers";
 import { AlertRule } from "../../../db/entities/AlertRule";
 import appConstants from "../../constants/appConstants";
 import { processWalletBalanceAlert } from "./WalletBalanceHandler";
-import { processIncomingEthAlert } from "./IncomingEthHandler";
 import { processOutgoingEthAlert } from "./outgoingEthHandler";
 import redisService from "../redis/redisService";
+import queues from "../bull/bullMQ"
 export class EthereumListenerService {
   private provider: ethers.WebSocketProvider;
 
@@ -33,7 +33,16 @@ export class EthereumListenerService {
             alert.alertType.type === appConstants.alertTypeNames.OUTGOING_ETH,
         );
 
-        await processIncomingEthAlert(incomingEthAlerts, blockNumber);
+        if(incomingEthAlerts.length > 0){
+            await queues.incomingEthQueue.add(
+              appConstants.WORKER_NAMES.INCOMING_ETH_WORKER,
+              {
+                alerts: incomingEthAlerts,
+                blockNumber,
+              },
+              { jobId: `incoming-${blockNumber}` },
+            );
+        }
 
         await processWalletBalanceAlert(walletBalanceAlerts);
         await processOutgoingEthAlert(blockNumber, outgoingEthAlerts);
