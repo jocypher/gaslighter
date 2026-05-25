@@ -3,7 +3,6 @@ import providers from "../../providers";
 import { AlertRule } from "../../../db/entities/AlertRule";
 import appConstants from "../../constants/appConstants";
 import { processWalletBalanceAlert } from "./WalletBalanceHandler";
-import { processOutgoingEthAlert } from "./outgoingEthHandler";
 import redisService from "../redis/redisService";
 import queues from "../bull/bullMQ"
 export class EthereumListenerService {
@@ -44,8 +43,20 @@ export class EthereumListenerService {
             );
         }
 
+        if(outgoingEthAlerts.length > 0){
+          await queues.outgoingEthQueue.add(
+            appConstants.WORKER_NAMES.OUTGOING_ETH_WORKER,
+            {
+              alerts:outgoingEthAlerts,
+              blockNumber
+            },
+            {
+              jobId:`outgoing-${blockNumber}`
+            }
+          )
+        }
+
         await processWalletBalanceAlert(walletBalanceAlerts);
-        await processOutgoingEthAlert(blockNumber, outgoingEthAlerts);
       } catch (error) {
         console.error(error);
       }

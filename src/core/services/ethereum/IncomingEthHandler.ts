@@ -6,7 +6,7 @@ import { AlertHistoryStatus } from "../../enums/alertHistoryStatus";
 import { MoreThan } from "typeorm";
 import ethQueue from "../bull/bullMQ";
 import appConstants from "../../constants/appConstants";
-import { checkRecentAlert, createAlertHistory } from "../../utils/alertHistory";
+import { checkRecentAlert, createAlertHistory } from "../../utils/alertHistoryUtilities";
 import {Worker} from "bullmq"
 import envConstants from "../../constants/envConstants";
 // export async function processIncomingEthAlert(

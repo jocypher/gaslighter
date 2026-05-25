@@ -57,3 +57,5 @@ feat: integrate BullMQ for handling incoming ETH alerts and refactor alert proce
 - Modified EthereumListenerService to enqueue incoming ETH alerts.
 - Updated package.json and package-lock.json to include BullMQ and related dependencies.
 - Refactored Redis configuration to utilize environment constants.
+
+feat: refactor alert history utilities and integrate into outgoing ETH alert processing
