@@ -5,7 +5,9 @@ import dotenv from "dotenv"
 import appRouter from "./api/index";
 import { requestLogger } from "./core/middlewares/reqLoggerMiddlewares";
 import { EthereumListenerService } from "./core/services/ethereum/ethereumListenerService";
-import { seedAlertTypes } from "./db/seeds/alertType.seed";
+import { seedAlertTypes,getCachedAlertTypes } from "./db/seeds/alertType.seed";
+import client from "./core/config/redisConfig";
+import "./core/workers"
 
 
 dotenv.config()
@@ -24,12 +26,18 @@ app.use(appRouter)
 AppDatasource.initialize()
   .then(async () => {
     console.log("Database connected successfully");
+    await client.connect();
+    
     await seedAlertTypes();
+
+    await getCachedAlertTypes();
+    
+    
     app.listen(PORT, async() => {
       console.log(`Server is running on port ${PORT}`);
       console.log(`Environment: ${process.env.NODE_ENV || "development"}`);
       const ethereumService = new EthereumListenerService()
-      //await ethereumService.startListening()
+      await ethereumService.startListening()
     });
    
   })

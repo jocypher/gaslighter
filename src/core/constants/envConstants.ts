@@ -9,7 +9,7 @@ dotenv.config()
    DATABASE: process.env.PG_DATABASE ?? "",
    JWT_SECRET: process.env.JWT_SECRET ?? "",
    JWT_EXPIRES_IN: "1d",
-   
+
    ALCHEMY_URL: {
      ETH: `${process.env.ALCHEMY_ETH_URL}/${process.env.ALCHEMY_API_KEY}`,
      POL: `${process.env.ALCHEMY_POL_URL}/${process.env.ALCHEMY_API_KEY}`,
@@ -17,6 +17,17 @@ dotenv.config()
    WS_ALCHEMY_URL: {
      ETH: `${process.env.WS_ALCHEMY_ETH_URL}/${process.env.ALCHEMY_API_KEY}`,
      POL: `${process.env.WS_ALCHEMY_POL_URL}/${process.env.ALCHEMY_API_KEY}`,
+   },
+   redisOptions: {
+     host: process.env.REDIS_HOST,
+     port: Number(process.env.REDIS_PORT) || 6379,
+   },
+   queueOptions: {
+     limiter:{
+      max: 1,
+      duration:1000
+     }
+
    },
  };
 

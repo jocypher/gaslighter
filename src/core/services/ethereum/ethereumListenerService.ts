@@ -2,9 +2,9 @@ import { ethers } from "ethers";
 import providers from "../../providers";
 import { AlertRule } from "../../../db/entities/AlertRule";
 import appConstants from "../../constants/appConstants";
-import { processWalletBalanceAlert } from "./WalletBalanceHandler";
-import { processIncomingEthAlert } from "./IncomingEthHandler";
-import { processOutgoingEthAlert } from "./outgoingEthHandler";
+
+import redisService from "../redis/redisService";
+import queues from "../bull/bullMQ";
 export class EthereumListenerService {
   private provider: ethers.WebSocketProvider;
 
@@ -17,36 +17,88 @@ export class EthereumListenerService {
 
     this.provider.on("block", async (blockNumber) => {
       try {
-        const alerts = await AlertRule.find({
-          where: {
-            isActive: true,
-          },
-          relations: {
-            user: true,
-            alertType: true,
-          },
-        });
+        const alerts = await getCachedAlertRules();
+        console.log(alerts);
         const incomingEthAlerts = alerts.filter(
           (alert) =>
-            alert.alertType.type ===
-            appConstants.alertTypeNames.INCOMING_ETH
+            alert.alertType.type === appConstants.alertTypeNames.INCOMING_ETH,
         );
 
         const walletBalanceAlerts = alerts.filter(
           (alert) =>
-            alert.alertType.type ===
-            appConstants.alertTypeNames.WALLET_BALANCE
+            alert.alertType.type === appConstants.alertTypeNames.WALLET_BALANCE,
         );
-        const outgoingEthAlerts = alerts.filter((alert)=> alert.alertType.type === appConstants.alertTypeNames.OUTGOING_ETH)
+        const outgoingEthAlerts = alerts.filter(
+          (alert) =>
+            alert.alertType.type === appConstants.alertTypeNames.OUTGOING_ETH,
+        );
 
-        await processIncomingEthAlert(incomingEthAlerts, blockNumber);
+        if (incomingEthAlerts.length > 0) {
+          await queues.incomingEthQueue.add(
+            appConstants.WORKER_NAMES.INCOMING_ETH_WORKER,
+            {
+              alerts: incomingEthAlerts,
+              blockNumber,
+            },
+            { jobId: `incoming-${blockNumber}` },
+          );
+        }
 
-        await processWalletBalanceAlert(walletBalanceAlerts);
-        await processOutgoingEthAlert(blockNumber, outgoingEthAlerts);
+        if (outgoingEthAlerts.length > 0) {
+          await queues.outgoingEthQueue.add(
+            appConstants.WORKER_NAMES.OUTGOING_ETH_WORKER,
+            {
+              alerts: outgoingEthAlerts,
+              blockNumber,
+            },
+            {
+              jobId: `outgoing-${blockNumber}`,
+            },
+          );
+        }
+        if(walletBalanceAlerts.length > 0){
+          await queues.walletBalanceQueue.add(
+            appConstants.WORKER_NAMES.WALLET_BALANCE_ETH_WORKER,
+            {
+              alerts: walletBalanceAlerts,
+              blockNumber,
+            },
+            {
+              jobId: `wallet-${blockNumber}`,
+            },
+          );
+        }
 
+        // await processWalletBalanceAlert(walletBalanceAlerts);
       } catch (error) {
         console.error(error);
       }
     });
+  }
+}
+
+async function getCachedAlertRules(): Promise<AlertRule[]> {
+  try {
+    const cachedAlerts = await redisService.getAlerts();
+
+    if (cachedAlerts) {
+      return JSON.parse(cachedAlerts);
+    }
+    const alerts = await AlertRule.find({
+      where: {
+        isActive: true,
+      },
+      relations: {
+        user: true,
+        alertHistories: true,
+        alertType: true,
+      },
+    });
+
+    await redisService.setAlerts(alerts);
+    return alerts;
+  } catch (error) {
+    console.warn(`Error occurred on the system`);
+    throw new Error("Error occurred");
   }
 }
