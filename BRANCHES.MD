@@ -61,3 +61,7 @@ feat: integrate BullMQ for handling incoming ETH alerts and refactor alert proce
 feat: refactor alert history utilities and integrate into outgoing ETH alert processing
 
 feat: add health check endpoint for queue status and refactor alert processing workers
+
+feat: enhance wallet balance alert processing with queue integration and recent alert checks
+
+feat: add morgan for logging and update express URL encoding options
