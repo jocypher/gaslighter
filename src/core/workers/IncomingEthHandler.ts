@@ -1,14 +1,14 @@
 import { ethers } from "ethers";
-import { AlertRule } from "../../../db/entities/AlertRule";
-import providers from "../../providers";
-import { AlertHistory } from "../../../db/entities/AlertHistory";
-import { AlertHistoryStatus } from "../../enums/alertHistoryStatus";
+import { AlertRule } from "../../db/entities/AlertRule";
+import providers from "../providers";
+import { AlertHistory } from "../../db/entities/AlertHistory";
+import { AlertHistoryStatus } from "../enums/alertHistoryStatus";
 import { MoreThan } from "typeorm";
-import ethQueue from "../bull/bullMQ";
-import appConstants from "../../constants/appConstants";
-import { checkRecentAlert, createAlertHistory } from "../../utils/alertHistoryUtilities";
+import ethQueue from "../services/bull/bullMQ";
+import appConstants from "../constants/appConstants";
+import { checkRecentAlert, createAlertHistory } from "../utils/alertHistoryUtilities";
 import {Worker} from "bullmq"
-import envConstants from "../../constants/envConstants";
+import envConstants from "../constants/envConstants";
 // export async function processIncomingEthAlert(
 //   alerts: AlertRule[],
 //   blockNumber: number,
@@ -81,11 +81,12 @@ import envConstants from "../../constants/envConstants";
 //     console.error(error);
 //   }
 // }
-
+console.log("🔧 Creating Incoming ETH Worker...");
 export const processIncomingEthWorker = new Worker(
   appConstants.QUEUE_NAMES.INCOMING_ETH_QUEUE,
   async (job) => {
     try {
+      console.log("~WORKER PROCESSING FOR INCOMING ETH~");
       const { alerts, blockNumber } = job.data;
 
       const block = await providers.ethereumWs.getBlock(blockNumber, true);
@@ -122,6 +123,7 @@ export const processIncomingEthWorker = new Worker(
           for (const alert of matchedAlerts) {
             // Check alerted recently
             const hasRecentAlert = await checkRecentAlert(alert.id);
+            console.log("HAS RECENT ALERT", hasRecentAlert);
             if (hasRecentAlert) {
               console.log(`Already alerted for rule ${alert.id} recently`);
               continue;
@@ -149,6 +151,7 @@ export const processIncomingEthWorker = new Worker(
       console.log(
         `Incoming ETH job completed: ${processedCount} alerts processed`,
       );
+
       return { processed: processedCount };
     } catch (error) {
       console.error(
@@ -158,8 +161,10 @@ export const processIncomingEthWorker = new Worker(
     }
   },
   {
-    connection: envConstants.redisOptions,
-    limiter: envConstants.queueOptions.limiter,
+    connection: {
+      host: envConstants.redisOptions.host,
+      port: envConstants.redisOptions.port,
+    }
   },
 );
 
@@ -167,6 +172,10 @@ export const processIncomingEthWorker = new Worker(
 
 
 // Event listeners
+processIncomingEthWorker.on('ready', () => {
+  console.log('✅✅✅ WORKER IS READY AND LISTENING FOR JOBS ✅✅✅');
+});
+
 processIncomingEthWorker.on("completed", (job, result) => {
   console.log(`Job ${job.id} completed with result:`, result);
 });

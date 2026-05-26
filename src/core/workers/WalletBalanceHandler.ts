@@ -1,10 +1,13 @@
 import { ethers } from "ethers";
-import { AlertHistory } from "../../../db/entities/AlertHistory";
-import { AlertRule } from "../../../db/entities/AlertRule";
-import { AlertRuleStatus } from "../../enums/alertRuleStatus";
-import { AlertHistoryStatus } from "../../enums/alertHistoryStatus";
-import providers from "../../providers";
+import { AlertHistory } from "../../db/entities/AlertHistory";
+import { AlertRule } from "../../db/entities/AlertRule";
+import { AlertRuleStatus } from "../enums/alertRuleStatus";
+import { AlertHistoryStatus } from "../enums/alertHistoryStatus";
+import providers from "../providers";
 import { MoreThan } from "typeorm";
+import { Worker } from "bullmq";
+import envConstants from "../constants/envConstants";
+import appConstants from "../constants/appConstants";
 
 export async function processWalletBalanceAlert(alerts: AlertRule[]) {
   try {
@@ -70,3 +73,40 @@ export async function processWalletBalanceAlert(alerts: AlertRule[]) {
     console.error(error);
   }
 }
+
+export const processWalletBalanceWorker = new Worker(
+  appConstants.QUEUE_NAMES.WALLET_BALANCE_QUEUE,
+  async (job) => {
+    try {
+      const { alerts, blockNumber } = job.data;
+      const block = await providers.ethereumWs.getBlock(blockNumber, true);
+
+      if (!block || !block.transactions) {
+        console.log("No transactions");
+        return { processed: 0 };
+      }
+      const addressMap = new Map<string, AlertRule[]>();
+
+      for (const alert of alerts) {
+        const address = alert.targetAddress.toLowerCase();
+        if (!addressMap.has(address)) {
+          addressMap.set(address, []);
+        }
+        addressMap.get(address)?.push(alert);
+      }
+      for (const [address, addressRules] of addressMap) {
+      }
+    } catch (error) {
+      console.error(
+        "Error occurred when trying to process incoming eth worker",
+      );
+      throw error;
+    }
+  },
+  {
+    connection: {
+      host: envConstants.redisOptions.host,
+      port: envConstants.redisOptions.port,
+    },
+  },
+);

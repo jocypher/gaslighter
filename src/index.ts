@@ -7,6 +7,7 @@ import { requestLogger } from "./core/middlewares/reqLoggerMiddlewares";
 import { EthereumListenerService } from "./core/services/ethereum/ethereumListenerService";
 import { seedAlertTypes,getCachedAlertTypes } from "./db/seeds/alertType.seed";
 import client from "./core/config/redisConfig";
+import "./core/workers"
 
 
 dotenv.config()
@@ -36,7 +37,7 @@ AppDatasource.initialize()
       console.log(`Server is running on port ${PORT}`);
       console.log(`Environment: ${process.env.NODE_ENV || "development"}`);
       const ethereumService = new EthereumListenerService()
-      //await ethereumService.startListening()
+      await ethereumService.startListening()
     });
    
   })

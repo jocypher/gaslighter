@@ -1,17 +1,17 @@
 import { ethers } from "ethers";
-import { AlertHistory } from "../../../db/entities/AlertHistory";
-import { AlertRule } from "../../../db/entities/AlertRule";
-import providers from "../../providers";
-import { AlertHistoryStatus } from "../../enums/alertHistoryStatus";
+import { AlertHistory } from "../../db/entities/AlertHistory";
+import { AlertRule } from "../../db/entities/AlertRule";
+import providers from "../providers";
+import { AlertHistoryStatus } from "../enums/alertHistoryStatus";
 import { MoreThan } from "typeorm";
-import appConstants from "../../constants/appConstants";
+import appConstants from "../constants/appConstants";
 import { Worker } from "bullmq";
-import envConstants from "../../constants/envConstants";
+import envConstants from "../constants/envConstants";
 import { match } from "node:assert";
 import {
   checkRecentAlert,
   createAlertHistory,
-} from "../../utils/alertHistoryUtilities";
+} from "../utils/alertHistoryUtilities";
 // export async function processOutgoingEthAlert(
 //   blockNumber: number,
 //   alerts: AlertRule[],
@@ -155,8 +155,10 @@ export const processOutgoingEthWorker = new Worker(
     }
   },
   {
-    connection: envConstants.redisOptions,
-    limiter: envConstants.queueOptions.limiter,
+    connection: {
+      host: envConstants.redisOptions.host,
+      port: envConstants.redisOptions.port,
+    },
   },
 );
 

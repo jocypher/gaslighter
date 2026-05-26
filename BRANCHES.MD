@@ -59,3 +59,5 @@ feat: integrate BullMQ for handling incoming ETH alerts and refactor alert proce
 - Refactored Redis configuration to utilize environment constants.
 
 feat: refactor alert history utilities and integrate into outgoing ETH alert processing
+
+feat: add health check endpoint for queue status and refactor alert processing workers
