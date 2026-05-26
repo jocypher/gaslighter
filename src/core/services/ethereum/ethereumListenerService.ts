@@ -2,7 +2,7 @@ import { ethers } from "ethers";
 import providers from "../../providers";
 import { AlertRule } from "../../../db/entities/AlertRule";
 import appConstants from "../../constants/appConstants";
-import { processWalletBalanceAlert } from "../../workers/WalletBalanceHandler";
+
 import redisService from "../redis/redisService";
 import queues from "../bull/bullMQ";
 export class EthereumListenerService {
@@ -56,8 +56,20 @@ export class EthereumListenerService {
             },
           );
         }
+        if(walletBalanceAlerts.length > 0){
+          await queues.walletBalanceQueue.add(
+            appConstants.WORKER_NAMES.WALLET_BALANCE_ETH_WORKER,
+            {
+              alerts: walletBalanceAlerts,
+              blockNumber,
+            },
+            {
+              jobId: `wallet-${blockNumber}`,
+            },
+          );
+        }
 
-        await processWalletBalanceAlert(walletBalanceAlerts);
+        // await processWalletBalanceAlert(walletBalanceAlerts);
       } catch (error) {
         console.error(error);
       }
