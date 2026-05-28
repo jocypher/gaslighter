@@ -32,7 +32,7 @@ export class EthereumListenerService {
           (alert) =>
             alert.alertType.type === appConstants.alertTypeNames.OUTGOING_ETH,
         );
-
+        const gasPriceAlerts = alerts.filter((alert)=> alert.alertType.type === appConstants.alertTypeNames.GAS_PRICE)
         if (incomingEthAlerts.length > 0) {
           await queues.incomingEthQueue.add(
             appConstants.WORKER_NAMES.INCOMING_ETH_WORKER,
@@ -67,6 +67,17 @@ export class EthereumListenerService {
               jobId: `wallet-${blockNumber}`,
             },
           );
+        }
+        if(gasPriceAlerts.length > 0){
+          await queues.gasPriceQueue.add(
+            appConstants.WORKER_NAMES.GAS_PRICE_WORKER
+            ,{
+              alerts: gasPriceAlerts
+          },
+          {
+            jobId: `gasPrice-${blockNumber}`
+          }
+        )
         }
 
         // await processWalletBalanceAlert(walletBalanceAlerts);

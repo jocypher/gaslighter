@@ -10,8 +10,11 @@ const walletBalanceQueue = new Queue(
 
 const outgoingEthQueue = new Queue(appConstants.QUEUE_NAMES.OUTGOING_ETH_QUEUE);
 
+const gasPriceQueue = new Queue(appConstants.QUEUE_NAMES.GAS_PRICE_QUEUE)
+
 export default {
     incomingEthQueue,
     outgoingEthQueue,
-    walletBalanceQueue
+    walletBalanceQueue,
+    gasPriceQueue
 }

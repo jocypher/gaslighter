@@ -65,3 +65,5 @@ feat: add health check endpoint for queue status and refactor alert processing w
 feat: enhance wallet balance alert processing with queue integration and recent alert checks
 
 feat: add morgan for logging and update express URL encoding options
+
+feat: add gas price queue and worker for monitoring gas price alerts
