@@ -32,7 +32,11 @@ export class EthereumListenerService {
           (alert) =>
             alert.alertType.type === appConstants.alertTypeNames.OUTGOING_ETH,
         );
-        const gasPriceAlerts = alerts.filter((alert)=> alert.alertType.type === appConstants.alertTypeNames.GAS_PRICE)
+        const gasPriceAlerts = alerts.filter(
+          (alert) =>
+            alert.alertType.type === appConstants.alertTypeNames.GAS_PRICE,
+        );
+
         if (incomingEthAlerts.length > 0) {
           await queues.incomingEthQueue.add(
             appConstants.WORKER_NAMES.INCOMING_ETH_WORKER,
@@ -40,7 +44,11 @@ export class EthereumListenerService {
               alerts: incomingEthAlerts,
               blockNumber,
             },
-            { jobId: `incoming-${blockNumber}` },
+            {
+              jobId: `incoming-${blockNumber}`,
+              removeOnFail: true,
+              attempts: 4,
+            },
           );
         }
 
@@ -53,10 +61,12 @@ export class EthereumListenerService {
             },
             {
               jobId: `outgoing-${blockNumber}`,
+              attempts: 4,
+              removeOnFail: true,
             },
           );
         }
-        if(walletBalanceAlerts.length > 0){
+        if (walletBalanceAlerts.length > 0) {
           await queues.walletBalanceQueue.add(
             appConstants.WORKER_NAMES.WALLET_BALANCE_ETH_WORKER,
             {
@@ -65,19 +75,23 @@ export class EthereumListenerService {
             },
             {
               jobId: `wallet-${blockNumber}`,
+              removeOnFail: true,
+              attempts: 5,
             },
           );
         }
-        if(gasPriceAlerts.length > 0){
+        if (gasPriceAlerts.length > 0) {
           await queues.gasPriceQueue.add(
-            appConstants.WORKER_NAMES.GAS_PRICE_WORKER
-            ,{
-              alerts: gasPriceAlerts
-          },
-          {
-            jobId: `gasPrice-${blockNumber}`
-          }
-        )
+            appConstants.WORKER_NAMES.GAS_PRICE_WORKER,
+            {
+              alerts: gasPriceAlerts,
+            },
+            {
+              jobId: `gasPrice-${blockNumber}`,
+              removeOnFail: true,
+              attempts: 4,
+            },
+          );
         }
 
         // await processWalletBalanceAlert(walletBalanceAlerts);

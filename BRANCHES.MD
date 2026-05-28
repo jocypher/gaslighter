@@ -67,3 +67,5 @@ feat: enhance wallet balance alert processing with queue integration and recent 
 feat: add morgan for logging and update express URL encoding options
 
 feat: add gas price queue and worker for monitoring gas price alerts
+
+feat: enhance gas price alert processing with job options and formatting improvements
