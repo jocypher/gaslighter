@@ -8,6 +8,7 @@ import { EthereumListenerService } from "./core/services/ethereum/ethereumListen
 import { seedAlertTypes,getCachedAlertTypes } from "./db/seeds/alertType.seed";
 import client from "./core/config/redisConfig";
 import "./core/workers"
+import morgan from "morgan";
 
 
 dotenv.config()
@@ -17,7 +18,8 @@ const PORT = 3000;
 
 
 app.use(express.json())
-app.use(express.urlencoded({ extended: false }));
+app.use(morgan("dev"))
+app.use(express.urlencoded({ extended: true }));
 app.use(requestLogger)
 
 app.use(appRouter)

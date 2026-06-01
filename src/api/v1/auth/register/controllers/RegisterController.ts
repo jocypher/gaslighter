@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import RegistrationRequest from "../interfaces";
 import { User } from "../../../../../db/entities/User";
 import { JwtService } from "../../../../../core/services/jwt/jwtService";
-
+import sendRegisterMail from "../../../../../core/mail/sendRegisterMail";
 
 export default async function RegisterController(
   req: Request,
@@ -36,9 +36,7 @@ export default async function RegisterController(
       email: createdUser.email,
     });
 
-    
-
-    return res.status(201).json({
+    res.status(201).json({
       success: true,
       data: {
         id: createdUser.id,
@@ -47,6 +45,12 @@ export default async function RegisterController(
       },
       accessToken,
     });
+
+    sendRegisterMail(createdUser.email, { name: createdUser.username }).catch(
+      (error) => {
+        console.error(`Failed to send email`);
+      },
+    );
   } catch (error) {
     next(error);
   }

@@ -1,0 +1,23 @@
+import envConstants from "../constants/envConstants";
+import emailService from "../services/email/emailService";
+import { changePasswordTemplate } from "../services/email/emailTemplates";
+
+async function changePasswordMail(email: string, data: { name: string }) {
+  try {
+    const html = emailService.compileTemplate(changePasswordTemplate, {
+      name: data.name,
+      app_name: envConstants.APP_NAME
+    });
+
+    return emailService.sendEmail({
+      to: email,
+      subject: "Change Password Mail",
+      html,
+    });
+  } catch (error) {
+    throw new Error("Server couldn't send email");
+  }
+}
+
+
+export default changePasswordMail

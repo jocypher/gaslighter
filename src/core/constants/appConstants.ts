@@ -26,11 +26,13 @@ const appConstants = {
     INCOMING_ETH_QUEUE: "incomingEthQueue",
     WALLET_BALANCE_QUEUE: "walletBalanceQueue",
     OUTGOING_ETH_QUEUE: "outgoingEthQueue",
+    GAS_PRICE_QUEUE:"gasPriceQueue"
   },
   WORKER_NAMES:{
     INCOMING_ETH_WORKER:"incomingEthWorker",
     WALLET_BALANCE_ETH_WORKER: "walletBalanceEthWorker",
-    OUTGOING_ETH_WORKER:"outgoingEthWorker"
+    OUTGOING_ETH_WORKER:"outgoingEthWorker",
+    GAS_PRICE_WORKER: "gasPriceWorker"
   }
 };
 
