@@ -69,3 +69,5 @@ feat: add morgan for logging and update express URL encoding options
 feat: add gas price queue and worker for monitoring gas price alerts
 
 feat: enhance gas price alert processing with job options and formatting improvements
+
+feat: integrate email notifications for password change and registration processes

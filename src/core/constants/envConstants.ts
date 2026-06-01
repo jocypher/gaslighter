@@ -2,6 +2,7 @@ import dotenv from "dotenv"
 dotenv.config()
 
  const envConstants = {
+  APP_NAME: process.env.app??"",
    HOST: process.env.PG_HOST ?? "localhost",
    PORT: Number(process.env.PG_PORT) ?? 5432,
    USER: process.env.PG_USER ?? "",
@@ -29,6 +30,11 @@ dotenv.config()
      }
 
    },
+   smtp:{
+    service: process.env.SERVICE??"gmail",
+    email: process.env.EMAIL??"",
+    password: process.env.GOOGLE_PASS??""
+   }
  };
 
 export default envConstants

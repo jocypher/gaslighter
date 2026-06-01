@@ -2,6 +2,7 @@ import { NextFunction, Response } from "express";
 import { AuthRequest } from "../../../../../core/middlewares/authMiddlewares";
 import { User } from "../../../../../db/entities/User";
 import appConstants from "../../../../../core/constants/appConstants";
+import changePasswordMail from "../../../../../core/mail/sendChangePassword";
 
 async function ChangePasswordController(
   req: AuthRequest,
@@ -11,7 +12,6 @@ async function ChangePasswordController(
   try {
     const id = req.user?.id;
 
-
     if (!id) {
       return res.status(401).json({
         success: false,
@@ -20,20 +20,19 @@ async function ChangePasswordController(
     }
     const { oldPassword, newPassword } = req.body;
 
-    console.log("OldPassword", oldPassword)
-    console.log("New Password", newPassword)
     const user = await User.findOne({
       where: {
         id: id!,
       },
-      select:{
+      select: {
         password: true,
-        id:true,
-        email:true
-      }
+        id: true,
+        email: true,
+        username: true,
+      },
     });
 
-    console.log(user)
+    console.log(user);
 
     if (!user) {
       return res
@@ -41,9 +40,7 @@ async function ChangePasswordController(
         .json({ success: false, message: "User not found" });
     }
 
-    const isOldPasswordCorrect = await user.validatePassword(oldPassword);;
-
-    console.log(`Is valid Old password: ${isOldPasswordCorrect}`)
+    const isOldPasswordCorrect = await user.validatePassword(oldPassword);
 
     if (!isOldPasswordCorrect) {
       return res.status(appConstants.statusCode.UNAUTHORIZED).json({
@@ -63,9 +60,12 @@ async function ChangePasswordController(
     user.password = newPassword;
     await user.save();
 
-    return res.status(appConstants.statusCode.SUCCESS).json({
+    res.status(appConstants.statusCode.SUCCESS).json({
       success: true,
       message: "Password changed successfully",
+    });
+    changePasswordMail(user.email, { name: user.username }).catch((error)=>{
+      console.error("Password change email failed:", error);
     });
   } catch (error) {
     console.log("Error is ", error);
@@ -73,4 +73,4 @@ async function ChangePasswordController(
   }
 }
 
-export default ChangePasswordController
+export default ChangePasswordController;
