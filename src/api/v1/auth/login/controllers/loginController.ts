@@ -3,6 +3,7 @@ import { User } from "../../../../../db/entities/User";
 import appConstants from "../../../../../core/constants/appConstants";
 import LoginRequest from "../interfaces";
 import { JwtService } from "../../../../../core/services/jwt/jwtService";
+import sendRegisterMail from "../../../../../core/mail/sendRegisterMail";
 
 export async function LoginController(
   req: Request,
@@ -19,6 +20,7 @@ export async function LoginController(
         id: true,
         email: true,
         password: true,
+        username:true
       },
     });
 
@@ -38,18 +40,21 @@ export async function LoginController(
       });
     }
 
-    console.log(user)
+    console.log(user);
 
     const accessToken = JwtService.generateToken({
       id: user.id,
       email: user.email,
     });
 
-    return res.status(appConstants.statusCode.SUCCESS).json({
+    res.status(appConstants.statusCode.SUCCESS).json({
       success: true,
       message: "Logged In successfully",
-      accessToken
+      accessToken,
     });
+  //  sendRegisterMail( { name: user.username }).catch((error) => {
+  //     console.error(`Failed to send email`, error);
+  //   });
   } catch (error) {
     next(error);
   }

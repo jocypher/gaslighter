@@ -2,15 +2,16 @@ import envConstants from "../constants/envConstants";
 import emailService from "../services/email/emailService";
 import { changePasswordTemplate } from "../services/email/emailTemplates";
 
-async function changePasswordMail(email: string, data: { name: string }) {
+async function changePasswordMail( data: { name: string }) {
   try {
     const html = emailService.compileTemplate(changePasswordTemplate, {
       name: data.name,
       app_name: envConstants.APP_NAME
     });
 
+    console.log("This is the html", html)
+
     return emailService.sendEmail({
-      to: email,
       subject: "Change Password Mail",
       html,
     });

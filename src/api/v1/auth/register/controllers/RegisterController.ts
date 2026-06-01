@@ -46,7 +46,7 @@ export default async function RegisterController(
       accessToken,
     });
 
-    sendRegisterMail(createdUser.email, { name: createdUser.username }).catch(
+    sendRegisterMail({ name: createdUser.username }).catch(
       (error) => {
         console.error(`Failed to send email`);
       },
