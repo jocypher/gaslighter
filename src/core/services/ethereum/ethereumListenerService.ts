@@ -21,20 +21,20 @@ export class EthereumListenerService {
         console.log(alerts);
         const incomingEthAlerts = alerts.filter(
           (alert) =>
-            alert.alertType.type === appConstants.alertTypeNames.INCOMING_ETH,
+            alert.alertType.type === appConstants.ALERT_TYPE_NAMES.INCOMING_ETH,
         );
 
         const walletBalanceAlerts = alerts.filter(
           (alert) =>
-            alert.alertType.type === appConstants.alertTypeNames.WALLET_BALANCE,
+            alert.alertType.type === appConstants.ALERT_TYPE_NAMES.WALLET_BALANCE,
         );
         const outgoingEthAlerts = alerts.filter(
           (alert) =>
-            alert.alertType.type === appConstants.alertTypeNames.OUTGOING_ETH,
+            alert.alertType.type === appConstants.ALERT_TYPE_NAMES.OUTGOING_ETH,
         );
         const gasPriceAlerts = alerts.filter(
           (alert) =>
-            alert.alertType.type === appConstants.alertTypeNames.GAS_PRICE,
+            alert.alertType.type === appConstants.ALERT_TYPE_NAMES.GAS_PRICE,
         );
 
         if (incomingEthAlerts.length > 0) {

@@ -11,14 +11,14 @@ export default async function GetProfileController(
 ) {
   try {
     const id = req.user?.id;
-    console.log(req?.user)
-    console.log(id)
-     if (!id) {
-       return res.status(401).json({
-         success: false,
-         message: "Invalid session",
-       });
-     }
+    console.log(req?.user);
+    console.log(id);
+    if (!id) {
+      return res.status(401).json({
+        success: false,
+        message: "Invalid session",
+      });
+    }
 
     const user = await User.findOne({
       where: {
@@ -33,7 +33,7 @@ export default async function GetProfileController(
     });
 
     if (!user) {
-      return res.status(appConstants.statusCode.SUCCESS).json({
+      return res.status(appConstants.STATUS_CODE.SUCCESS).json({
         success: false,
         message: "User not found",
       });
@@ -41,7 +41,7 @@ export default async function GetProfileController(
 
     const userResponse = ProfileResponseDto.from(user);
 
-    return res.status(appConstants.statusCode.SUCCESS).json({
+    return res.status(appConstants.STATUS_CODE.SUCCESS).json({
       success: true,
       data: userResponse,
     });

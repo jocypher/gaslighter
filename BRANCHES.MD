@@ -75,3 +75,9 @@ feat: integrate email notifications for password change and registration process
 refactor: simplify email parameters in change password and registration mail functions
 
 feat: add helmet for security and implement incoming alert email notifications
+
+
+J00006
+feat: integrate winston for logging and add morgan middleware for request logging
+
+feat: update app constants to use uppercase naming convention and refactor redis options

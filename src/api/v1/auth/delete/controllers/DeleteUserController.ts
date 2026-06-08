@@ -9,32 +9,31 @@ export default async function DeleteUserController(
   next: NextFunction,
 ) {
   try {
-    const id  = req.user?.id as string;
+    const id = req.user?.id as string;
 
     const user = await User.findOne({
       where: {
         id: id,
       },
       select: {
-        id: true,isDeleted:true,deletedAt:true
-        
+        id: true,
+        isDeleted: true,
+        deletedAt: true,
       },
     });
     if (!user) {
-      return res.status(appConstants.statusCode.NOTFOUND).json({
+      return res.status(appConstants.STATUS_CODE.NOTFOUND).json({
         success: false,
         message: "User doesn't exist",
       });
     }
 
-    user.isDeleted = true,
-    user.deletedAt = new Date(Date.now())
-    
-    return res.status(appConstants.statusCode.SUCCESS).json({
+    ((user.isDeleted = true), (user.deletedAt = new Date(Date.now())));
+
+    return res.status(appConstants.STATUS_CODE.SUCCESS).json({
       success: true,
       message: "Account deleted successfully",
     });
-    
   } catch (error) {
     console.log(error);
     next(error);

@@ -20,12 +20,12 @@ export async function LoginController(
         id: true,
         email: true,
         password: true,
-        username:true
+        username: true,
       },
     });
 
     if (!user) {
-      return res.status(appConstants.statusCode.SUCCESS).json({
+      return res.status(appConstants.STATUS_CODE.SUCCESS).json({
         success: false,
         message: "User doesn't exist",
       });
@@ -34,7 +34,7 @@ export async function LoginController(
     const validatePassword = await user.validatePassword(password);
 
     if (!validatePassword) {
-      return res.status(appConstants.statusCode.UNAUTHORIZED).json({
+      return res.status(appConstants.STATUS_CODE.UNAUTHORIZED).json({
         success: false,
         message: "Invalid Credentials",
       });
@@ -47,14 +47,14 @@ export async function LoginController(
       email: user.email,
     });
 
-    res.status(appConstants.statusCode.SUCCESS).json({
+    res.status(appConstants.STATUS_CODE.SUCCESS).json({
       success: true,
       message: "Logged In successfully",
       accessToken,
     });
-  //  sendRegisterMail( { name: user.username }).catch((error) => {
-  //     console.error(`Failed to send email`, error);
-  //   });
+    //  sendRegisterMail( { name: user.username }).catch((error) => {
+    //     console.error(`Failed to send email`, error);
+    //   });
   } catch (error) {
     next(error);
   }

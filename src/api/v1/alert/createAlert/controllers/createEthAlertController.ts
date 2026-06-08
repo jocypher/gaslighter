@@ -54,7 +54,7 @@ async function CreateEthAlertController(
 
     await alertRule.save();
 
-    return res.status(appConstants.statusCode.SUCCESS).json({
+    return res.status(appConstants.STATUS_CODE.SUCCESS).json({
       success: true,
       data: AlertRuleResponseDto.from(alertRule),
     });

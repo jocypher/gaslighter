@@ -1,4 +1,4 @@
-import { NextFunction,Response } from "express";
+import { NextFunction, Response } from "express";
 import { AuthRequest } from "../../../../../core/middlewares/authMiddlewares";
 import { AlertHistory } from "../../../../../db/entities/AlertHistory";
 import appConstants from "../../../../../core/constants/appConstants";
@@ -10,29 +10,29 @@ export default async function GetAlertHistoryByIdController(
   next: NextFunction,
 ) {
   try {
-    const alertHistoryId = Number(req.params.id)
+    const alertHistoryId = Number(req.params.id);
 
     const alertHistory = await AlertHistory.findOne({
-        where:{
-            id: alertHistoryId
-        },
-        relations:{
-            alertRule: true
-        }
-    })
-    if(!alertHistory){
-        return res.status(appConstants.statusCode.SUCCESS).json({
-            success:false,
-            message:"Alert history not found"
-        })
+      where: {
+        id: alertHistoryId,
+      },
+      relations: {
+        alertRule: true,
+      },
+    });
+    if (!alertHistory) {
+      return res.status(appConstants.STATUS_CODE.SUCCESS).json({
+        success: false,
+        message: "Alert history not found",
+      });
     }
-    console.log(alertHistory)
-    const alertHistoryResponse = AlertHistoryResponseDto.from(alertHistory)
+    console.log(alertHistory);
+    const alertHistoryResponse = AlertHistoryResponseDto.from(alertHistory);
 
-    return res.status(appConstants.statusCode.SUCCESS).json({
-        success:true,
-        data: alertHistoryResponse
-    })
+    return res.status(appConstants.STATUS_CODE.SUCCESS).json({
+      success: true,
+      data: alertHistoryResponse,
+    });
   } catch (error) {
     next(error);
   }

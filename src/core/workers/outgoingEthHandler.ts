@@ -156,8 +156,8 @@ export const processOutgoingEthWorker = new Worker(
   },
   {
     connection: {
-      host: envConstants.redisOptions.host,
-      port: envConstants.redisOptions.port,
+      host: envConstants.REDIS_OPTIONS.host,
+      port: envConstants.REDIS_OPTIONS.port,
     },
   },
 );

@@ -16,14 +16,14 @@ export default async function DeleteAlertController(
       },
     });
     if (!alert) {
-      return res.status(appConstants.statusCode.SUCCESS).json({
+      return res.status(appConstants.STATUS_CODE.SUCCESS).json({
         success: false,
         message: "Alert not found",
       });
     }
     await AlertRule.delete(alertId);
 
-    return res.status(appConstants.statusCode.SUCCESS).json({
+    return res.status(appConstants.STATUS_CODE.SUCCESS).json({
       success: true,
       message: "Alert deleted successfully",
     });
