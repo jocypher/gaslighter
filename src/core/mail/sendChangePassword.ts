@@ -9,8 +9,6 @@ async function changePasswordMail( data: { name: string }) {
       app_name: envConstants.APP_NAME
     });
 
-    console.log("This is the html", html)
-
     return emailService.sendEmail({
       subject: "Change Password Mail",
       html,

@@ -9,6 +9,7 @@ import appConstants from "../constants/appConstants";
 import { checkRecentAlert, createAlertHistory } from "../utils/alertHistoryUtilities";
 import {Worker} from "bullmq"
 import envConstants from "../constants/envConstants";
+import sendIncomingAlertMail from "../mail/sendAlertMail";
 // export async function processIncomingEthAlert(
 //   alerts: AlertRule[],
 //   blockNumber: number,
@@ -142,6 +143,11 @@ export const processIncomingEthWorker = new Worker(
 
             // TODO: Send email/webhook here
             // await sendEmailAlert(alert.user.email, eventData);
+            const data = {
+              name: fullTx.from,
+              eventData: eventData
+            }
+            await sendIncomingAlertMail(data)
           }
         } catch (error) {
           console.warn(`Error processing transaction ${txHash}:`, error);
@@ -173,7 +179,7 @@ export const processIncomingEthWorker = new Worker(
 
 // Event listeners
 processIncomingEthWorker.on('ready', () => {
-  console.log('✅✅✅ WORKER IS READY AND LISTENING FOR JOBS ✅✅✅');
+  console.log('WORKER IS READY AND LISTENING FOR JOBS ');
 });
 
 processIncomingEthWorker.on("completed", (job, result) => {

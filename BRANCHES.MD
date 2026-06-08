@@ -73,3 +73,5 @@ feat: enhance gas price alert processing with job options and formatting improve
 feat: integrate email notifications for password change and registration processes
 
 refactor: simplify email parameters in change password and registration mail functions
+
+feat: add helmet for security and implement incoming alert email notifications
