@@ -38,6 +38,7 @@ export class EthereumListenerService {
         );
 
         if (incomingEthAlerts.length > 0) {
+          const jobId = `incoming-${blockNumber}-${Date.now()}`; 
           await queues.incomingEthQueue.add(
             appConstants.WORKER_NAMES.INCOMING_ETH_WORKER,
             {
@@ -45,14 +46,16 @@ export class EthereumListenerService {
               blockNumber,
             },
             {
-              jobId: `incoming-${blockNumber}`,
+              jobId,
               removeOnFail: true,
+              removeOnComplete:true,
               attempts: 4,
             },
           );
         }
 
         if (outgoingEthAlerts.length > 0) {
+          const jobId = `outgoing-${blockNumber}-${Date.now()}`; 
           await queues.outgoingEthQueue.add(
             appConstants.WORKER_NAMES.OUTGOING_ETH_WORKER,
             {
@@ -60,13 +63,15 @@ export class EthereumListenerService {
               blockNumber,
             },
             {
-              jobId: `outgoing-${blockNumber}`,
+              jobId,
               attempts: 4,
               removeOnFail: true,
+              removeOnComplete:true
             },
           );
         }
         if (walletBalanceAlerts.length > 0) {
+          const jobId = `wallet-${blockNumber}-${Date.now()}`; 
           await queues.walletBalanceQueue.add(
             appConstants.WORKER_NAMES.WALLET_BALANCE_ETH_WORKER,
             {
@@ -74,21 +79,25 @@ export class EthereumListenerService {
               blockNumber,
             },
             {
-              jobId: `wallet-${blockNumber}`,
+              jobId,
               removeOnFail: true,
+              removeOnComplete:true,
               attempts: 5,
             },
           );
         }
         if (gasPriceAlerts.length > 0) {
+          const jobId = `gasPrice-${blockNumber}-${Date.now()}`; 
           await queues.gasPriceQueue.add(
             appConstants.WORKER_NAMES.GAS_PRICE_WORKER,
             {
               alerts: gasPriceAlerts,
             },
             {
-              jobId: `gasPrice-${blockNumber}`,
+              jobId,
               removeOnFail: true,
+              removeOnComplete:true,
+            
               attempts: 4,
             },
           );

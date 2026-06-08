@@ -4,13 +4,16 @@ import { incomingAlertTemplate } from "../services/email/emailTemplates";
 
 async function sendIncomingAlertMail(data: {
   name: string;
-  eventData: any;
+  result: any;
+  timestamp: any;
 }) {
   try {
     const html = emailService.compileTemplate(incomingAlertTemplate, {
       name: data.name,
       app_name: envConstants.APP_NAME,
-      event_data: data.eventData
+      result: data.result,
+      timestamp: data.timestamp,
+
     });
 
     return emailService.sendEmail({

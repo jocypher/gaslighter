@@ -54,10 +54,8 @@ export const incomingAlertTemplate = `<!DOCTYPE html>
       <p style="color: #555; line-height: 1.6;">
         Your monitoring rule for <strong>{{app_name}}</strong> has detected an incoming Bitcoin transaction that matches your criteria.
       </p>
-      
-       <p style="color: #555; line-height: 1.6;">
-        The transaction details are <strong>{{event_data}}</strong> 
-      </p>
+
+
       <div style="background: #fff8f0; border: 1px solid #ffe0b2; padding: 15px; border-radius: 6px; margin: 20px 0;">
         <p style="margin: 0 0 10px 0; font-weight: bold; color: #333;">Alert Details:</p>
         <p style="margin: 0; color: #555;">

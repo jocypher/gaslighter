@@ -82,7 +82,7 @@ import sendIncomingAlertMail from "../mail/sendAlertMail";
 //     console.error(error);
 //   }
 // }
-console.log("🔧 Creating Incoming ETH Worker...");
+
 export const processIncomingEthWorker = new Worker(
   appConstants.QUEUE_NAMES.INCOMING_ETH_QUEUE,
   async (job) => {
@@ -144,8 +144,10 @@ export const processIncomingEthWorker = new Worker(
             // TODO: Send email/webhook here
             // await sendEmailAlert(alert.user.email, eventData);
             const data = {
-              name: fullTx.from,
-              eventData: eventData
+              name: alert.user.username,
+              result: eventData,
+              timestamp: block.timestamp,
+
             }
             await sendIncomingAlertMail(data)
           }
