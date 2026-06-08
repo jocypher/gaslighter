@@ -18,7 +18,7 @@ export class EthereumListenerService {
     this.provider.on("block", async (blockNumber) => {
       try {
         const alerts = await getCachedAlertRules();
-        console.log(alerts);
+
         const incomingEthAlerts = alerts.filter(
           (alert) =>
             alert.alertType.type === appConstants.ALERT_TYPE_NAMES.INCOMING_ETH,
@@ -26,7 +26,8 @@ export class EthereumListenerService {
 
         const walletBalanceAlerts = alerts.filter(
           (alert) =>
-            alert.alertType.type === appConstants.ALERT_TYPE_NAMES.WALLET_BALANCE,
+            alert.alertType.type ===
+            appConstants.ALERT_TYPE_NAMES.WALLET_BALANCE,
         );
         const outgoingEthAlerts = alerts.filter(
           (alert) =>
@@ -36,9 +37,25 @@ export class EthereumListenerService {
           (alert) =>
             alert.alertType.type === appConstants.ALERT_TYPE_NAMES.GAS_PRICE,
         );
-
+        console.log(
+          `Get the length of incoming alerts`,
+          incomingEthAlerts.length,
+        );
+        console.log(
+          `Get the length of outgoing alerts`,
+          outgoingEthAlerts.length,
+        );
+        console.log(
+          `Get the length of wallet balance alerts`,
+          walletBalanceAlerts.length,
+        );
+        console.log(
+          `Get the length of gas price alerts`,
+          gasPriceAlerts.length,
+        );
+        
         if (incomingEthAlerts.length > 0) {
-          const jobId = `incoming-${blockNumber}-${Date.now()}`; 
+          const jobId = `incoming-${blockNumber}-${Date.now()}`;
           await queues.incomingEthQueue.add(
             appConstants.WORKER_NAMES.INCOMING_ETH_WORKER,
             {
@@ -48,14 +65,14 @@ export class EthereumListenerService {
             {
               jobId,
               removeOnFail: true,
-              removeOnComplete:true,
+              removeOnComplete: true,
               attempts: 4,
             },
           );
         }
 
         if (outgoingEthAlerts.length > 0) {
-          const jobId = `outgoing-${blockNumber}-${Date.now()}`; 
+          const jobId = `outgoing-${blockNumber}-${Date.now()}`;
           await queues.outgoingEthQueue.add(
             appConstants.WORKER_NAMES.OUTGOING_ETH_WORKER,
             {
@@ -66,12 +83,12 @@ export class EthereumListenerService {
               jobId,
               attempts: 4,
               removeOnFail: true,
-              removeOnComplete:true
+              removeOnComplete: true,
             },
           );
         }
         if (walletBalanceAlerts.length > 0) {
-          const jobId = `wallet-${blockNumber}-${Date.now()}`; 
+          const jobId = `wallet-${blockNumber}-${Date.now()}`;
           await queues.walletBalanceQueue.add(
             appConstants.WORKER_NAMES.WALLET_BALANCE_ETH_WORKER,
             {
@@ -81,13 +98,13 @@ export class EthereumListenerService {
             {
               jobId,
               removeOnFail: true,
-              removeOnComplete:true,
+              removeOnComplete: true,
               attempts: 5,
             },
           );
         }
         if (gasPriceAlerts.length > 0) {
-          const jobId = `gasPrice-${blockNumber}-${Date.now()}`; 
+          const jobId = `gasPrice-${blockNumber}-${Date.now()}`;
           await queues.gasPriceQueue.add(
             appConstants.WORKER_NAMES.GAS_PRICE_WORKER,
             {
@@ -96,8 +113,8 @@ export class EthereumListenerService {
             {
               jobId,
               removeOnFail: true,
-              removeOnComplete:true,
-            
+              removeOnComplete: true,
+
               attempts: 4,
             },
           );

@@ -12,7 +12,7 @@ import {
 import { AlertHistoryStatus } from "../enums/alertHistoryStatus";
 import envConstants from "../constants/envConstants";
 
-export const CheckGasPrice = new Worker(
+export const checkGasPrice = new Worker(
   appConstants.QUEUE_NAMES.OUTGOING_ETH_QUEUE,
   async (job) => {
     try {
@@ -94,3 +94,20 @@ export const CheckGasPrice = new Worker(
     },
   },
 );
+
+
+checkGasPrice.on('ready', () => {
+  console.log('PROCESS CHECK GAS PRICE WORKER IS READY AND LISTENING FOR JOBS ');
+ });
+
+checkGasPrice.on("completed", (job, result) => {
+  console.log(`Job ${job.id} completed with result:`, result);
+});
+
+checkGasPrice.on("failed", (job:any, error:any) => {
+  console.error(`Job ${job.id} failed:`, error.message);
+});
+
+checkGasPrice.on("error", (error) => {
+  console.error("Worker error:", error);
+});

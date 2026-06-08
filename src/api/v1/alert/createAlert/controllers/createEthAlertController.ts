@@ -20,7 +20,8 @@ async function CreateEthAlertController(
       thresholdValue,
       webhookUrl,
     } = req.body;
-    const userId = req.user!.id;
+    console.log(req.user)
+    const userId = req.user?.id;
 
     AlertRuleValidations.validateEthereumAddress(targetAddress);
 
@@ -30,7 +31,7 @@ async function CreateEthAlertController(
 
     const alertRuleStatus = AlertRuleValidations.convertAlertStatusEnum(status);
 
-    const user = await AlertRuleValidations.findUser(userId);
+    const user = await AlertRuleValidations.findUser(userId!);
     let validatedThreshold: bigint | null = null;
 
     if (thresholdValue !== undefined && thresholdValue !== null) {

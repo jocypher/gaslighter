@@ -12,18 +12,32 @@ export const validateCreateEthAlertSchema = Joi.object({
       "string.empty": "Target address is required",
       "any.required": "Target address is required",
     }),
+  // status: Joi.string()
+  //   .valid(...Object.values(AlertRuleStatus))
+  //   .required()
+  //   .messages({
+  //     "string.empty": "Status cannot be empty",
+  //     "any.only": "Invalid alert rule status",
+  //     "any.required": "Status is required",
+  //   }),
+  status: Joi.alternatives().conditional("alertRuleStatus", {
+    is:
+      appConstants.ALERT_TYPE_NAMES.LARGE_TRANSACTION ||
+      appConstants.ALERT_TYPE_NAMES.TOKEN_TRANSFER ||
+      appConstants.ALERT_TYPE_NAMES.CONTRACT_INTERACTION,
 
-  status: Joi.string()
-    .valid(...Object.values(AlertRuleStatus))
-    .required()
-    .messages({
-      "string.empty": "Status cannot be empty",
-      "any.only": "Invalid alert rule status",
-      "any.required": "Status is required",
-    }),
-
+    then: Joi.string()
+      .valid(...Object.values(AlertRuleStatus))
+      .required()
+      .messages({
+        "string.empty": "Status cannot be empty",
+        "any.only": "Invalid alert rule status",
+        "any.required": "Status is required",
+      }),
+    otherwise: Joi.string().optional(),
+  }),
   alertType: Joi.string()
-    .valid(...Object.values(appConstants.alertTypeNames))
+    .valid(...Object.values(appConstants.ALERT_TYPE_NAMES))
     .required()
     .messages({
       "string.empty": "Alert type cannot be empty",
@@ -43,10 +57,10 @@ export const validateCreateEthAlertSchema = Joi.object({
 
   thresholdValue: Joi.alternatives().conditional("alertType", {
     is:
-      appConstants.alertTypeNames.WALLET_BALANCE ||
-      appConstants.alertTypeNames.LARGE_TRANSACTION ||
-      appConstants.alertTypeNames.TOKEN_TRANSFER ||
-      appConstants.alertTypeNames.GAS_PRICE,
+      appConstants.ALERT_TYPE_NAMES.WALLET_BALANCE ||
+      appConstants.ALERT_TYPE_NAMES.LARGE_TRANSACTION ||
+      appConstants.ALERT_TYPE_NAMES.TOKEN_TRANSFER ||
+      appConstants.ALERT_TYPE_NAMES.GAS_PRICE,
     then: Joi.number().positive().required().messages({
       "number.base": "Threshold value must be a number",
       "number.positive": "Threshold value must be greater than 0",

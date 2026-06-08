@@ -153,3 +153,23 @@ export const processWalletBalanceWorker = new Worker(
     },
   },
 );
+
+
+
+
+
+
+ processWalletBalanceWorker.on('ready', () => {
+  console.log('PROCESS WALLET BALANCE WORKER IS READY AND LISTENING FOR JOBS ');
+ });
+processWalletBalanceWorker.on("completed", (job, result) => {
+  console.log(`Job ${job.id} completed with result:`, result);
+});
+
+processWalletBalanceWorker.on("failed", (job: any, error: any) => {
+  console.error(`Job ${job.id} failed:`, error.message);
+});
+
+processWalletBalanceWorker.on("error", (error) => {
+  console.error("Worker error:", error);
+});

@@ -17,6 +17,7 @@ const router = Router();
 
 router.post(
   "/",
+  authenticate,
   validate(validateCreateEthAlertSchema),
   CreateEthAlertController,
 );

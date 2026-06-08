@@ -175,14 +175,12 @@ export const processIncomingEthWorker = new Worker(
     }
   },
 );
+//Event listeners
 
-
-
-
-// Event listeners
 processIncomingEthWorker.on('ready', () => {
-  console.log('WORKER IS READY AND LISTENING FOR JOBS ');
+  console.log('PROCESS INCOMING WORKER IS READY AND LISTENING FOR JOBS ');
 });
+
 
 processIncomingEthWorker.on("completed", (job, result) => {
   console.log(`Job ${job.id} completed with result:`, result);

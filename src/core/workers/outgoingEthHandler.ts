@@ -162,6 +162,9 @@ export const processOutgoingEthWorker = new Worker(
   },
 );
 
+ processOutgoingEthWorker.on('ready', () => {
+  console.log('PROCESS OUTGOING ETH WORKER IS READY AND LISTENING FOR JOBS ');
+ });
 processOutgoingEthWorker.on("completed", (job, result) => {
   console.log(`Job ${job.id} completed with result:`, result);
 });
@@ -173,3 +176,6 @@ processOutgoingEthWorker.on("failed", (job: any, error: any) => {
 processOutgoingEthWorker.on("error", (error) => {
   console.error("Worker error:", error);
 });
+
+
+
