@@ -13,7 +13,7 @@ import { AlertHistoryStatus } from "../enums/alertHistoryStatus";
 import envConstants from "../constants/envConstants";
 
 export const checkGasPrice = new Worker(
-  appConstants.QUEUE_NAMES.OUTGOING_ETH_QUEUE,
+  appConstants.QUEUE_NAMES.GAS_PRICE_QUEUE,
   async (job) => {
     try {
       console.log("~Checking the gas price at a specific threshold value~");
