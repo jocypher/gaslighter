@@ -84,3 +84,5 @@ feat: update app constants to use uppercase naming convention and refactor redis
 feat: add .env.example file with configuration settings for database, redis, blockchain, JWT, email, application, and alerts
 
 feat: enhance alert processing and worker logging; integrate BullMQ, update validation schema, and refactor datasource options
+
+feat: add email templates for Bitcoin alerts and gas price notifications; update gas price worker queue name
