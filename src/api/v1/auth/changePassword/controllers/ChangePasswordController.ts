@@ -36,14 +36,14 @@ async function ChangePasswordController(
 
     if (!user) {
       return res
-        .status(appConstants.statusCode.NOTFOUND)
+        .status(appConstants.STATUS_CODE.NOTFOUND)
         .json({ success: false, message: "User not found" });
     }
 
     const isOldPasswordCorrect = await user.validatePassword(oldPassword);
 
     if (!isOldPasswordCorrect) {
-      return res.status(appConstants.statusCode.UNAUTHORIZED).json({
+      return res.status(appConstants.STATUS_CODE.UNAUTHORIZED).json({
         success: false,
         message: "Old password is incorrect",
       });
@@ -52,7 +52,7 @@ async function ChangePasswordController(
     const isSameAsOld = await user.validatePassword(newPassword);
 
     if (isSameAsOld) {
-      return res.status(appConstants.statusCode.SUCCESS).json({
+      return res.status(appConstants.STATUS_CODE.SUCCESS).json({
         success: false,
         message: "New password cannot be the same as old password",
       });
@@ -60,11 +60,11 @@ async function ChangePasswordController(
     user.password = newPassword;
     await user.save();
 
-    res.status(appConstants.statusCode.SUCCESS).json({
+    res.status(appConstants.STATUS_CODE.SUCCESS).json({
       success: true,
       message: "Password changed successfully",
     });
-    changePasswordMail({ name: user.username }).catch((error)=>{
+    changePasswordMail({ name: user.username }).catch((error) => {
       console.error("Password change email failed:", error);
     });
   } catch (error) {

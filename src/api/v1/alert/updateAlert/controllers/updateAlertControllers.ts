@@ -40,7 +40,7 @@ export default async function UpdateAlertController(
     });
 
     if (!alert) {
-      return res.status(appConstants.statusCode.NOTFOUND).json({
+      return res.status(appConstants.STATUS_CODE.NOTFOUND).json({
         success: false,
         message: "Alert not found",
       });
@@ -67,7 +67,7 @@ export default async function UpdateAlertController(
         },
       });
       if (!alertType) {
-        return res.status(appConstants.statusCode.SUCCESS).json({
+        return res.status(appConstants.STATUS_CODE.SUCCESS).json({
           success: false,
           message: "alert type not found",
         });
@@ -76,10 +76,10 @@ export default async function UpdateAlertController(
     }
 
     await alert.save();
-    return res.status(appConstants.statusCode.SUCCESS).json({
-        success:true,
-        message:"Alert updated successfully"
-    })
+    return res.status(appConstants.STATUS_CODE.SUCCESS).json({
+      success: true,
+      message: "Alert updated successfully",
+    });
   } catch (error) {
     next(error);
   }

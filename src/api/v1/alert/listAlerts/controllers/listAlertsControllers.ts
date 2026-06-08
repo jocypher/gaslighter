@@ -24,9 +24,9 @@ export default async function ListAlertsControllers(
       .where("alert.isActive= :isActive", { isActive: true });
 
     if (search && search !== "") {
-       const cleanedSearch = search.trim()
+      const cleanedSearch = search.trim();
 
-       const trimmedQuery = `%${cleanedSearch}%`;
+      const trimmedQuery = `%${cleanedSearch}%`;
       qb.andWhere(
         `
         (
@@ -48,7 +48,7 @@ export default async function ListAlertsControllers(
     console.log(alertRules);
 
     if (alertRules.length == 0) {
-      return res.status(appConstants.statusCode.SUCCESS).json({
+      return res.status(appConstants.STATUS_CODE.SUCCESS).json({
         success: false,
         message: "No alert rules found",
         data: [],
@@ -58,13 +58,13 @@ export default async function ListAlertsControllers(
     const response = alertRules.map((alertRule) =>
       AlertRuleResponseDto.from(alertRule),
     );
-    return res.status(appConstants.statusCode.SUCCESS).json({
+    return res.status(appConstants.STATUS_CODE.SUCCESS).json({
       success: true,
       data: response,
       pageInfo: {
         page,
         limit,
-        total
+        total,
       },
     });
   } catch (error) {

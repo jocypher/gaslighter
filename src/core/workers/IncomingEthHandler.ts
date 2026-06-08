@@ -170,19 +170,17 @@ export const processIncomingEthWorker = new Worker(
   },
   {
     connection: {
-      host: envConstants.redisOptions.host,
-      port: envConstants.redisOptions.port,
+      host: envConstants.REDIS_OPTIONS.host,
+      port: envConstants.REDIS_OPTIONS.port,
     }
   },
 );
+//Event listeners
 
-
-
-
-// Event listeners
 processIncomingEthWorker.on('ready', () => {
-  console.log('WORKER IS READY AND LISTENING FOR JOBS ');
+  console.log('PROCESS INCOMING WORKER IS READY AND LISTENING FOR JOBS ');
 });
+
 
 processIncomingEthWorker.on("completed", (job, result) => {
   console.log(`Job ${job.id} completed with result:`, result);

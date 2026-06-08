@@ -4,11 +4,11 @@ import envConstants from "../../constants/envConstants";
 const transporter = nodemailer.createTransport({
   // host:"smtp.sendgrid.net",
   // port: 587,
-  host: envConstants.smtp.HOST,
-  port: envConstants.smtp.PORT,
+  host: envConstants.SMTP.HOST,
+  port: envConstants.SMTP.PORT,
   auth: {
-    user: envConstants.smtp.USERNAME,
-    pass: envConstants.smtp.PASSWORD,
+    user: envConstants.SMTP.USERNAME,
+    pass: envConstants.SMTP.PASSWORD,
   },
 });
 

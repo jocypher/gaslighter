@@ -12,8 +12,8 @@ import {
 import { AlertHistoryStatus } from "../enums/alertHistoryStatus";
 import envConstants from "../constants/envConstants";
 
-export const CheckGasPrice = new Worker(
-  appConstants.QUEUE_NAMES.OUTGOING_ETH_QUEUE,
+export const checkGasPrice = new Worker(
+  appConstants.QUEUE_NAMES.GAS_PRICE_QUEUE,
   async (job) => {
     try {
       console.log("~Checking the gas price at a specific threshold value~");
@@ -89,8 +89,25 @@ export const CheckGasPrice = new Worker(
   },
   {
     connection: {
-      host: envConstants.redisOptions.host,
-      port: envConstants.redisOptions.port,
+      host: envConstants.REDIS_OPTIONS.host,
+      port: envConstants.REDIS_OPTIONS.port,
     },
   },
 );
+
+
+checkGasPrice.on('ready', () => {
+  console.log('PROCESS CHECK GAS PRICE WORKER IS READY AND LISTENING FOR JOBS ');
+ });
+
+checkGasPrice.on("completed", (job, result) => {
+  console.log(`Job ${job.id} completed with result:`, result);
+});
+
+checkGasPrice.on("failed", (job:any, error:any) => {
+  console.error(`Job ${job.id} failed:`, error.message);
+});
+
+checkGasPrice.on("error", (error) => {
+  console.error("Worker error:", error);
+});

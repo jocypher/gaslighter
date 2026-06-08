@@ -48,8 +48,7 @@ feat: update alert history retrieval; log alert history response and adjust pagi
 J00005
 feat: integrate Redis for caching alert rules and types; implement Redis client and update alert type seeding
 
-feat: integrate BullMQ for handling incoming ETH alerts and refactor alert processing
-
+feat: integrate BullMQ for handling incoming ETH alerts and refactor alert processing.
 - Added BullMQ queues for incoming ETH, outgoing ETH, and wallet balance alerts.
 - Refactored IncomingEthHandler to use BullMQ for processing alerts.
 - Created utility functions for checking recent alerts and creating alert history.
@@ -75,3 +74,15 @@ feat: integrate email notifications for password change and registration process
 refactor: simplify email parameters in change password and registration mail functions
 
 feat: add helmet for security and implement incoming alert email notifications
+
+
+J00006
+feat: integrate winston for logging and add morgan middleware for request logging
+
+feat: update app constants to use uppercase naming convention and refactor redis options
+
+feat: add .env.example file with configuration settings for database, redis, blockchain, JWT, email, application, and alerts
+
+feat: enhance alert processing and worker logging; integrate BullMQ, update validation schema, and refactor datasource options
+
+feat: add email templates for Bitcoin alerts and gas price notifications; update gas price worker queue name

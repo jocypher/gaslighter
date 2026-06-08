@@ -3,7 +3,7 @@ import envConstants from "../constants/envConstants";
 
 const client = createClient({
   socket: {
-    ...envConstants.redisOptions,
+    ...envConstants.REDIS_OPTIONS,
     reconnectStrategy: (times) => Math.min(times * 50, 2000)
   },
 });

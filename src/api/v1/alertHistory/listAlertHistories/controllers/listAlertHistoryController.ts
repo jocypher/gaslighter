@@ -30,20 +30,26 @@ export default async function ListAlertHistoryController(
 
     if (query) {
       const trimmedQuery = `%${query.trim()}%`;
-      qb.andWhere(`
+      qb.andWhere(
+        `
         (
         "alertHistory"."triggeredAt" ILIKE :search
         OR
         "alertHistory"."eventData" ILIKE :search
         )
-        `,{
-          search: trimmedQuery
-        })
+        `,
+        {
+          search: trimmedQuery,
+        },
+      );
     }
-    const [alertHistories, total] = await qb.skip(skip).take(limit).getManyAndCount()
+    const [alertHistories, total] = await qb
+      .skip(skip)
+      .take(limit)
+      .getManyAndCount();
 
     if (total == 0) {
-      return res.status(appConstants.statusCode.SUCCESS).json({
+      return res.status(appConstants.STATUS_CODE.SUCCESS).json({
         success: false,
         message: "No alert history available",
       });
@@ -51,7 +57,7 @@ export default async function ListAlertHistoryController(
     const alertHistoryResponse = alertHistories.map((alertHistory) =>
       AlertHistoryResponseDto.from(alertHistory),
     );
-    return res.status(appConstants.statusCode.SUCCESS).json({
+    return res.status(appConstants.STATUS_CODE.SUCCESS).json({
       success: true,
       data: alertHistoryResponse,
       dataInfo: {

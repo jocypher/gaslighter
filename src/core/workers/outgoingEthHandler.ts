@@ -156,12 +156,15 @@ export const processOutgoingEthWorker = new Worker(
   },
   {
     connection: {
-      host: envConstants.redisOptions.host,
-      port: envConstants.redisOptions.port,
+      host: envConstants.REDIS_OPTIONS.host,
+      port: envConstants.REDIS_OPTIONS.port,
     },
   },
 );
 
+ processOutgoingEthWorker.on('ready', () => {
+  console.log('PROCESS OUTGOING ETH WORKER IS READY AND LISTENING FOR JOBS ');
+ });
 processOutgoingEthWorker.on("completed", (job, result) => {
   console.log(`Job ${job.id} completed with result:`, result);
 });
@@ -173,3 +176,6 @@ processOutgoingEthWorker.on("failed", (job: any, error: any) => {
 processOutgoingEthWorker.on("error", (error) => {
   console.error("Worker error:", error);
 });
+
+
+

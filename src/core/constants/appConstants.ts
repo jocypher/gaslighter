@@ -1,11 +1,12 @@
 
+
 const appConstants = {
-  statusCode: {
+  STATUS_CODE: {
     UNAUTHORIZED: 400,
     SUCCESS: 200,
     NOTFOUND: 404,
   },
-  alertTypeNames: {
+  ALERT_TYPE_NAMES: {
     WALLET_BALANCE: "WALLET_BALANCE",
     GAS_PRICE: "GAS_PRICE",
     INCOMING_ETH: "INCOMING_ETH",
