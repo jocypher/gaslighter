@@ -64,7 +64,7 @@ async function ChangePasswordController(
       success: true,
       message: "Password changed successfully",
     });
-    changePasswordMail(user.email, { name: user.username }).catch((error)=>{
+    changePasswordMail({ name: user.username }).catch((error)=>{
       console.error("Password change email failed:", error);
     });
   } catch (error) {

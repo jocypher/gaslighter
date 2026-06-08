@@ -2,7 +2,7 @@ import dotenv from "dotenv"
 dotenv.config()
 
  const envConstants = {
-  APP_NAME: process.env.app??"",
+   APP_NAME: process.env.app ?? "",
    HOST: process.env.PG_HOST ?? "localhost",
    PORT: Number(process.env.PG_PORT) ?? 5432,
    USER: process.env.PG_USER ?? "",
@@ -24,17 +24,17 @@ dotenv.config()
      port: Number(process.env.REDIS_PORT) || 6379,
    },
    queueOptions: {
-     limiter:{
-      max: 1,
-      duration:1000
-     }
-
+     limiter: {
+       max: 1,
+       duration: 1000,
+     },
    },
-   smtp:{
-    service: process.env.SERVICE??"gmail",
-    email: process.env.EMAIL??"",
-    password: process.env.GOOGLE_PASS??""
-   }
+   smtp: {
+     HOST: process.env.SMTP_HOST??"",
+     PORT:Number(process.env.SMTP_PORT)??587,
+     USERNAME: process.env.SMTP_USERNAME,
+     PASSWORD: process.env.SMTP_PASSWORD
+   },
  };
 
 export default envConstants

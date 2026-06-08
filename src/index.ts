@@ -9,6 +9,7 @@ import { seedAlertTypes,getCachedAlertTypes } from "./db/seeds/alertType.seed";
 import client from "./core/config/redisConfig";
 import "./core/workers"
 import morgan from "morgan";
+import helmet from "helmet";
 
 
 dotenv.config()
@@ -16,7 +17,7 @@ dotenv.config()
 const app = express();
 const PORT = 3000;
 
-
+app.use(helmet())
 app.use(express.json())
 app.use(morgan("dev"))
 app.use(express.urlencoded({ extended: true }));
@@ -39,7 +40,7 @@ AppDatasource.initialize()
       console.log(`Server is running on port ${PORT}`);
       console.log(`Environment: ${process.env.NODE_ENV || "development"}`);
       const ethereumService = new EthereumListenerService()
-      await ethereumService.startListening()
+      //await ethereumService.startListening()
     });
    
   })

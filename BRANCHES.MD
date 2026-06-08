@@ -71,3 +71,7 @@ feat: add gas price queue and worker for monitoring gas price alerts
 feat: enhance gas price alert processing with job options and formatting improvements
 
 feat: integrate email notifications for password change and registration processes
+
+refactor: simplify email parameters in change password and registration mail functions
+
+feat: add helmet for security and implement incoming alert email notifications

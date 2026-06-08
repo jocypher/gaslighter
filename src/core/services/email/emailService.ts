@@ -4,10 +4,11 @@ import envConstants from "../../constants/envConstants";
 const transporter = nodemailer.createTransport({
   // host:"smtp.sendgrid.net",
   // port: 587,
-  service: envConstants.smtp.service,
+  host: envConstants.smtp.HOST,
+  port: envConstants.smtp.PORT,
   auth: {
-    user: envConstants.smtp.email,
-    pass: envConstants.smtp.password,
+    user: envConstants.smtp.USERNAME,
+    pass: envConstants.smtp.PASSWORD,
   },
 });
 
@@ -24,17 +25,16 @@ function compileTemplate(template: string, variables: Record<string, string>) {
 }
 
 async function sendEmail({
-  to,
+
   subject,
   html,
 }: {
-  to: string;
   subject: string;
   html: string;
 }) {
   return transporter.sendMail({
-    from: envConstants.smtp.email,
-    to,
+    from: "Resend <onboarding@resend.dev>",
+    to: "jonathanwilchield@gmail.com",
     subject,
     html,
   });

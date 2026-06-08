@@ -11,6 +11,7 @@ import {
 } from "../utils/alertHistoryUtilities";
 import { AlertHistoryStatus } from "../enums/alertHistoryStatus";
 import envConstants from "../constants/envConstants";
+
 export const CheckGasPrice = new Worker(
   appConstants.QUEUE_NAMES.OUTGOING_ETH_QUEUE,
   async (job) => {
