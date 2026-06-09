@@ -4,12 +4,15 @@ import { User } from './entities/User';
 import { AlertHistory } from './entities/AlertHistory';
 import { AlertRule } from './entities/AlertRule';
 import { AlertType } from './entities/AlertType';
+import path from 'path';
 
 const AppDatasource = new DataSource({
   ...datasourceOptions(),
-  synchronize: true,
+  synchronize: false,
   logging: false,
   entities: [User, AlertHistory, AlertRule, AlertType],
+  migrations: [path.join(__dirname, '../db/migrations/*.{ts,js}')],
+  migrationsTableName: 'Gaslighter_Migrations',
 });
 
 export default AppDatasource;

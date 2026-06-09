@@ -31,7 +31,7 @@ AppDatasource.initialize()
     console.log('Database connected successfully');
     await client.connect();
 
-    await seedAlertTypes();
+    // await seedAlertTypes();
 
     await getCachedAlertTypes();
 

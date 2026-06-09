@@ -104,3 +104,6 @@ refactor: codebase for consistency and readability
 - Introduced Prettier configuration for consistent code formatting.
 - Updated alert type seeding logic for clarity and consistency.
 - Enhanced error handling messages for better debugging.
+
+J00007
+feat: add migration scripts and update datasource configuration
