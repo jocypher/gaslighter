@@ -1,15 +1,12 @@
-import { ethers } from "ethers";
-import { AlertRule } from "../../db/entities/AlertRule";
-import providers from "../providers";
-import { AlertHistory } from "../../db/entities/AlertHistory";
-import { AlertHistoryStatus } from "../enums/alertHistoryStatus";
-import { MoreThan } from "typeorm";
-import ethQueue from "../services/bull/bullMQ";
-import appConstants from "../constants/appConstants";
-import { checkRecentAlert, createAlertHistory } from "../utils/alertHistoryUtilities";
-import {Worker} from "bullmq"
-import envConstants from "../constants/envConstants";
-import sendIncomingAlertMail from "../mail/sendAlertMail";
+import { ethers } from 'ethers';
+import { AlertRule } from '../../db/entities/AlertRule';
+import providers from '../providers';
+import { AlertHistoryStatus } from '../enums/alertHistoryStatus';
+import appConstants from '../constants/appConstants';
+import { checkRecentAlert, createAlertHistory } from '../utils/alertHistoryUtilities';
+import { Worker } from 'bullmq';
+import envConstants from '../constants/envConstants';
+import sendIncomingAlertMail from '../mail/sendAlertMail';
 // export async function processIncomingEthAlert(
 //   alerts: AlertRule[],
 //   blockNumber: number,
@@ -87,12 +84,12 @@ export const processIncomingEthWorker = new Worker(
   appConstants.QUEUE_NAMES.INCOMING_ETH_QUEUE,
   async (job) => {
     try {
-      console.log("~WORKER PROCESSING FOR INCOMING ETH~");
+      console.log('~WORKER PROCESSING FOR INCOMING ETH~');
       const { alerts, blockNumber } = job.data;
 
       const block = await providers.ethereumWs.getBlock(blockNumber, true);
       if (!block || !block.transactions) {
-        console.log("No transactions in the block");
+        console.log('No transactions in the block');
         return { processed: 0 };
       }
       const addressMap = new Map<string, AlertRule[]>();
@@ -111,9 +108,7 @@ export const processIncomingEthWorker = new Worker(
 
       for (const txHash of block.transactions) {
         try {
-          const fullTx = await providers.ethereumWs.getTransaction(
-            txHash as string,
-          );
+          const fullTx = await providers.ethereumWs.getTransaction(txHash as string);
           if (!fullTx?.to) continue;
 
           const targetAddress = fullTx.to.toLowerCase();
@@ -124,7 +119,7 @@ export const processIncomingEthWorker = new Worker(
           for (const alert of matchedAlerts) {
             // Check alerted recently
             const hasRecentAlert = await checkRecentAlert(alert.id);
-            console.log("HAS RECENT ALERT", hasRecentAlert);
+            console.log('HAS RECENT ALERT', hasRecentAlert);
             if (hasRecentAlert) {
               console.log(`Already alerted for rule ${alert.id} recently`);
               continue;
@@ -147,24 +142,19 @@ export const processIncomingEthWorker = new Worker(
               name: alert.user.username,
               result: eventData,
               timestamp: block.timestamp,
-
-            }
-            await sendIncomingAlertMail(data)
+            };
+            await sendIncomingAlertMail(data);
           }
         } catch (error) {
           console.warn(`Error processing transaction ${txHash}:`, error);
           continue;
         }
       }
-      console.log(
-        `Incoming ETH job completed: ${processedCount} alerts processed`,
-      );
+      console.log(`Incoming ETH job completed: ${processedCount} alerts processed`);
 
       return { processed: processedCount };
     } catch (error) {
-      console.error(
-        "Error occurred when trying to process incoming eth worker",
-      );
+      console.error('Error occurred when trying to process incoming eth worker');
       throw error;
     }
   },
@@ -172,7 +162,7 @@ export const processIncomingEthWorker = new Worker(
     connection: {
       host: envConstants.REDIS_OPTIONS.host,
       port: envConstants.REDIS_OPTIONS.port,
-    }
+    },
   },
 );
 //Event listeners
@@ -181,15 +171,14 @@ processIncomingEthWorker.on('ready', () => {
   console.log('PROCESS INCOMING WORKER IS READY AND LISTENING FOR JOBS ');
 });
 
-
-processIncomingEthWorker.on("completed", (job, result) => {
+processIncomingEthWorker.on('completed', (job, result) => {
   console.log(`Job ${job.id} completed with result:`, result);
 });
 
-processIncomingEthWorker.on("failed", (job:any, error:any) => {
+processIncomingEthWorker.on('failed', (job: any, error: any) => {
   console.error(`Job ${job.id} failed:`, error.message);
 });
 
-processIncomingEthWorker.on("error", (error) => {
-  console.error("Worker error:", error);
+processIncomingEthWorker.on('error', (error) => {
+  console.error('Worker error:', error);
 });

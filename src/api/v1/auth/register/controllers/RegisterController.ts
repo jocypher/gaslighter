@@ -1,14 +1,10 @@
-import { Request, Response, NextFunction } from "express";
-import RegistrationRequest from "../interfaces";
-import { User } from "../../../../../db/entities/User";
-import { JwtService } from "../../../../../core/services/jwt/jwtService";
-import sendRegisterMail from "../../../../../core/mail/sendRegisterMail";
+import { Request, Response, NextFunction } from 'express';
+import RegistrationRequest from '../interfaces';
+import { User } from '../../../../../db/entities/User';
+import { JwtService } from '../../../../../core/services/jwt/jwtService';
+import sendRegisterMail from '../../../../../core/mail/sendRegisterMail';
 
-export default async function RegisterController(
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) {
+export default async function RegisterController(req: Request, res: Response, next: NextFunction) {
   try {
     const { username, email, password } = req.body as RegistrationRequest;
 
@@ -19,7 +15,7 @@ export default async function RegisterController(
     if (existingUser) {
       return res.status(409).json({
         success: false,
-        message: "User already exists",
+        message: 'User already exists',
       });
     }
 
@@ -46,11 +42,12 @@ export default async function RegisterController(
       accessToken,
     });
 
-    sendRegisterMail({ name: createdUser.username }).catch(
-      (error) => {
-        console.error(`Failed to send email`);
-      },
-    );
+    sendRegisterMail({ name: createdUser.username }).catch((error) => {
+      console.error(`Failed to send email`);
+      const err = new Error('Failed to send register mail');
+      (err as any).cause = error;
+      throw err;
+    });
   } catch (error) {
     next(error);
   }

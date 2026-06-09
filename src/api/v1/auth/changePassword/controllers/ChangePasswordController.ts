@@ -1,21 +1,17 @@
-import { NextFunction, Response } from "express";
-import { AuthRequest } from "../../../../../core/middlewares/authMiddlewares";
-import { User } from "../../../../../db/entities/User";
-import appConstants from "../../../../../core/constants/appConstants";
-import changePasswordMail from "../../../../../core/mail/sendChangePassword";
+import { NextFunction, Response } from 'express';
+import { AuthRequest } from '../../../../../core/middlewares/authMiddlewares';
+import { User } from '../../../../../db/entities/User';
+import appConstants from '../../../../../core/constants/appConstants';
+import changePasswordMail from '../../../../../core/mail/sendChangePassword';
 
-async function ChangePasswordController(
-  req: AuthRequest,
-  res: Response,
-  next: NextFunction,
-) {
+async function ChangePasswordController(req: AuthRequest, res: Response, next: NextFunction) {
   try {
     const id = req.user?.id;
 
     if (!id) {
       return res.status(401).json({
         success: false,
-        message: "Invalid session",
+        message: 'Invalid session',
       });
     }
     const { oldPassword, newPassword } = req.body;
@@ -37,7 +33,7 @@ async function ChangePasswordController(
     if (!user) {
       return res
         .status(appConstants.STATUS_CODE.NOTFOUND)
-        .json({ success: false, message: "User not found" });
+        .json({ success: false, message: 'User not found' });
     }
 
     const isOldPasswordCorrect = await user.validatePassword(oldPassword);
@@ -45,7 +41,7 @@ async function ChangePasswordController(
     if (!isOldPasswordCorrect) {
       return res.status(appConstants.STATUS_CODE.UNAUTHORIZED).json({
         success: false,
-        message: "Old password is incorrect",
+        message: 'Old password is incorrect',
       });
     }
 
@@ -54,7 +50,7 @@ async function ChangePasswordController(
     if (isSameAsOld) {
       return res.status(appConstants.STATUS_CODE.SUCCESS).json({
         success: false,
-        message: "New password cannot be the same as old password",
+        message: 'New password cannot be the same as old password',
       });
     }
     user.password = newPassword;
@@ -62,13 +58,13 @@ async function ChangePasswordController(
 
     res.status(appConstants.STATUS_CODE.SUCCESS).json({
       success: true,
-      message: "Password changed successfully",
+      message: 'Password changed successfully',
     });
     changePasswordMail({ name: user.username }).catch((error) => {
-      console.error("Password change email failed:", error);
+      console.error('Password change email failed:', error);
     });
   } catch (error) {
-    console.log("Error is ", error);
+    console.log('Error is ', error);
     next(error);
   }
 }

@@ -1,5 +1,5 @@
-export enum AlertHistoryStatus{
-    PENDING="pending",
-    SENT="sent",
-    FAILED="failed"
+export enum AlertHistoryStatus {
+  PENDING = 'pending',
+  SENT = 'sent',
+  FAILED = 'failed',
 }

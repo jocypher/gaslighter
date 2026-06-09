@@ -1,17 +1,11 @@
-import { ethers } from "ethers";
-import { AlertHistory } from "../../db/entities/AlertHistory";
-import { AlertRule } from "../../db/entities/AlertRule";
-import providers from "../providers";
-import { AlertHistoryStatus } from "../enums/alertHistoryStatus";
-import { MoreThan } from "typeorm";
-import appConstants from "../constants/appConstants";
-import { Worker } from "bullmq";
-import envConstants from "../constants/envConstants";
-import { match } from "node:assert";
-import {
-  checkRecentAlert,
-  createAlertHistory,
-} from "../utils/alertHistoryUtilities";
+import { ethers } from 'ethers';
+import { AlertRule } from '../../db/entities/AlertRule';
+import providers from '../providers';
+import { AlertHistoryStatus } from '../enums/alertHistoryStatus';
+import appConstants from '../constants/appConstants';
+import { Worker } from 'bullmq';
+import envConstants from '../constants/envConstants';
+import { checkRecentAlert, createAlertHistory } from '../utils/alertHistoryUtilities';
 // export async function processOutgoingEthAlert(
 //   blockNumber: number,
 //   alerts: AlertRule[],
@@ -93,7 +87,7 @@ export const processOutgoingEthWorker = new Worker(
 
       const block = await providers.ethereumWs.getBlock(blockNumber, true);
       if (!block || !block.transactions) {
-        console.log("No transactions in the block");
+        console.log('No transactions in the block');
         return { processed: 0 };
       }
 
@@ -109,7 +103,7 @@ export const processOutgoingEthWorker = new Worker(
         addressMap.get(address)?.push(alert);
       }
 
-      let processedCount = 0;
+      const processedCount = 0;
 
       for (const txHash of block.transactions) {
         try {
@@ -143,14 +137,10 @@ export const processOutgoingEthWorker = new Worker(
           continue;
         }
       }
-      console.log(
-        `Incoming ETH job completed: ${processedCount} alerts processed`,
-      );
+      console.log(`Incoming ETH job completed: ${processedCount} alerts processed`);
       return { processed: processedCount };
     } catch (error) {
-      console.error(
-        "Error occurred when trying to process incoming eth worker",
-      );
+      console.error('Error occurred when trying to process incoming eth worker');
       throw error;
     }
   },
@@ -162,20 +152,17 @@ export const processOutgoingEthWorker = new Worker(
   },
 );
 
- processOutgoingEthWorker.on('ready', () => {
+processOutgoingEthWorker.on('ready', () => {
   console.log('PROCESS OUTGOING ETH WORKER IS READY AND LISTENING FOR JOBS ');
- });
-processOutgoingEthWorker.on("completed", (job, result) => {
+});
+processOutgoingEthWorker.on('completed', (job, result) => {
   console.log(`Job ${job.id} completed with result:`, result);
 });
 
-processOutgoingEthWorker.on("failed", (job: any, error: any) => {
+processOutgoingEthWorker.on('failed', (job: any, error: any) => {
   console.error(`Job ${job.id} failed:`, error.message);
 });
 
-processOutgoingEthWorker.on("error", (error) => {
-  console.error("Worker error:", error);
+processOutgoingEthWorker.on('error', (error) => {
+  console.error('Worker error:', error);
 });
-
-
-

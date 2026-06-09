@@ -1,3 +1,7 @@
 {
-  "cSpell.words": ["bullmq", "ILIKE"]
+  "cSpell.words": ["bullmq", "ILIKE"],
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
+  "editor.formatOnSave": true
 }

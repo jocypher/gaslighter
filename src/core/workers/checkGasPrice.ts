@@ -1,22 +1,17 @@
-import { Worker } from "bullmq";
-import appConstants from "../constants/appConstants";
-import providers from "../providers";
-import { AlertRule } from "../../db/entities/AlertRule";
-import { ethers } from "ethers";
-import { AlertRuleStatus } from "../enums/alertRuleStatus";
-import { match } from "node:assert";
-import {
-  checkRecentAlert,
-  createAlertHistory,
-} from "../utils/alertHistoryUtilities";
-import { AlertHistoryStatus } from "../enums/alertHistoryStatus";
-import envConstants from "../constants/envConstants";
+import { Worker } from 'bullmq';
+import appConstants from '../constants/appConstants';
+import providers from '../providers';
+import { ethers } from 'ethers';
+import { AlertRuleStatus } from '../enums/alertRuleStatus';
+import { checkRecentAlert, createAlertHistory } from '../utils/alertHistoryUtilities';
+import { AlertHistoryStatus } from '../enums/alertHistoryStatus';
+import envConstants from '../constants/envConstants';
 
 export const checkGasPrice = new Worker(
   appConstants.QUEUE_NAMES.GAS_PRICE_QUEUE,
   async (job) => {
     try {
-      console.log("~Checking the gas price at a specific threshold value~");
+      console.log('~Checking the gas price at a specific threshold value~');
       const { alerts } = job.data;
 
       const gasPriceInWei = (await providers.ethereumWs.getFeeData()).gasPrice;
@@ -25,13 +20,11 @@ export const checkGasPrice = new Worker(
         return { processed: 0 };
       }
 
-      const gasPriceInGwei = parseFloat(
-        ethers.formatUnits(gasPriceInWei, "gwei"),
-      );
+      const gasPriceInGwei = parseFloat(ethers.formatUnits(gasPriceInWei, 'gwei'));
 
       let processedCount = 0;
 
-      for (let alert of alerts) {
+      for (const alert of alerts) {
         try {
           const thresholdValue = BigInt(alert.thresholdValue);
           let matches = false;
@@ -62,7 +55,7 @@ export const checkGasPrice = new Worker(
               gasPriceInWei: gasPriceInWei.toString(),
               gasPriceInGwei: gasPriceInGwei.toFixed(2),
               thresholdInWei: thresholdValue.toString(),
-              thresholdInGwei: ethers.formatUnits(thresholdValue, "gwei"),
+              thresholdInGwei: ethers.formatUnits(thresholdValue, 'gwei'),
               condition: alert.alertRuleStatus,
             };
 
@@ -77,14 +70,16 @@ export const checkGasPrice = new Worker(
             // });
           }
         } catch (error) {
-          console.warn("Error occurred at ");
+          console.warn('Error occurred at ', error);
           continue;
         }
       }
 
       return { processed: processedCount };
     } catch (error) {
-      throw new Error("An error occurred here");
+      const err = new Error('Failed to process gas price worker');
+      (err as any).cause = error;
+      throw err;
     }
   },
   {
@@ -95,19 +90,18 @@ export const checkGasPrice = new Worker(
   },
 );
 
-
 checkGasPrice.on('ready', () => {
   console.log('PROCESS CHECK GAS PRICE WORKER IS READY AND LISTENING FOR JOBS ');
- });
+});
 
-checkGasPrice.on("completed", (job, result) => {
+checkGasPrice.on('completed', (job, result) => {
   console.log(`Job ${job.id} completed with result:`, result);
 });
 
-checkGasPrice.on("failed", (job:any, error:any) => {
+checkGasPrice.on('failed', (job: any, error: any) => {
   console.error(`Job ${job.id} failed:`, error.message);
 });
 
-checkGasPrice.on("error", (error) => {
-  console.error("Worker error:", error);
+checkGasPrice.on('error', (error) => {
+  console.error('Worker error:', error);
 });

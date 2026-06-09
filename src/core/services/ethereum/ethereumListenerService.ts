@@ -1,10 +1,10 @@
-import { ethers } from "ethers";
-import providers from "../../providers";
-import { AlertRule } from "../../../db/entities/AlertRule";
-import appConstants from "../../constants/appConstants";
+import { ethers } from 'ethers';
+import providers from '../../providers';
+import { AlertRule } from '../../../db/entities/AlertRule';
+import appConstants from '../../constants/appConstants';
 
-import redisService from "../redis/redisService";
-import queues from "../bull/bullMQ";
+import redisService from '../redis/redisService';
+import queues from '../bull/bullMQ';
 export class EthereumListenerService {
   private provider: ethers.WebSocketProvider;
 
@@ -13,47 +13,30 @@ export class EthereumListenerService {
   }
 
   async startListening() {
-    console.log("Listening for transactions");
+    console.log('Listening for transactions');
 
-    this.provider.on("block", async (blockNumber) => {
+    this.provider.on('block', async (blockNumber) => {
       try {
         const alerts = await getCachedAlertRules();
 
         const incomingEthAlerts = alerts.filter(
-          (alert) =>
-            alert.alertType.type === appConstants.ALERT_TYPE_NAMES.INCOMING_ETH,
+          (alert) => alert.alertType.type === appConstants.ALERT_TYPE_NAMES.INCOMING_ETH,
         );
 
         const walletBalanceAlerts = alerts.filter(
-          (alert) =>
-            alert.alertType.type ===
-            appConstants.ALERT_TYPE_NAMES.WALLET_BALANCE,
+          (alert) => alert.alertType.type === appConstants.ALERT_TYPE_NAMES.WALLET_BALANCE,
         );
         const outgoingEthAlerts = alerts.filter(
-          (alert) =>
-            alert.alertType.type === appConstants.ALERT_TYPE_NAMES.OUTGOING_ETH,
+          (alert) => alert.alertType.type === appConstants.ALERT_TYPE_NAMES.OUTGOING_ETH,
         );
         const gasPriceAlerts = alerts.filter(
-          (alert) =>
-            alert.alertType.type === appConstants.ALERT_TYPE_NAMES.GAS_PRICE,
+          (alert) => alert.alertType.type === appConstants.ALERT_TYPE_NAMES.GAS_PRICE,
         );
-        console.log(
-          `Get the length of incoming alerts`,
-          incomingEthAlerts.length,
-        );
-        console.log(
-          `Get the length of outgoing alerts`,
-          outgoingEthAlerts.length,
-        );
-        console.log(
-          `Get the length of wallet balance alerts`,
-          walletBalanceAlerts.length,
-        );
-        console.log(
-          `Get the length of gas price alerts`,
-          gasPriceAlerts.length,
-        );
-        
+        console.log(`Get the length of incoming alerts`, incomingEthAlerts.length);
+        console.log(`Get the length of outgoing alerts`, outgoingEthAlerts.length);
+        console.log(`Get the length of wallet balance alerts`, walletBalanceAlerts.length);
+        console.log(`Get the length of gas price alerts`, gasPriceAlerts.length);
+
         if (incomingEthAlerts.length > 0) {
           const jobId = `incoming-${blockNumber}-${Date.now()}`;
           await queues.incomingEthQueue.add(
@@ -150,6 +133,8 @@ async function getCachedAlertRules(): Promise<AlertRule[]> {
     return alerts;
   } catch (error) {
     console.warn(`Error occurred on the system`);
-    throw new Error("Error occurred");
+    const err = new Error('Failed to fetch cached alert rules');
+    (err as any).cause = error;
+    throw err;
   }
 }

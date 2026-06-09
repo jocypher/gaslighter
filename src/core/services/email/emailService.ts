@@ -1,5 +1,5 @@
-import nodemailer from "nodemailer";
-import envConstants from "../../constants/envConstants";
+import nodemailer from 'nodemailer';
+import envConstants from '../../constants/envConstants';
 
 const transporter = nodemailer.createTransport({
   // host:"smtp.sendgrid.net",
@@ -16,28 +16,21 @@ function compileTemplate(template: string, variables: Record<string, string>) {
   let output = template;
 
   for (const key in variables) {
-    const regex = new RegExp(`{{${key}}}`, "g");
-    const value = variables[key] ?? "";
+    const regex = new RegExp(`{{${key}}}`, 'g');
+    const value = variables[key] ?? '';
     output = output.replace(regex, value);
   }
 
   return output;
 }
 
-async function sendEmail({
-
-  subject,
-  html,
-}: {
-  subject: string;
-  html: string;
-}) {
+async function sendEmail({ subject, html }: { subject: string; html: string }) {
   return transporter.sendMail({
-    from: "Resend <onboarding@resend.dev>",
-    to: "jonathanwilchield@gmail.com",
+    from: 'Resend <onboarding@resend.dev>',
+    to: 'jonathanwilchield@gmail.com',
     subject,
     html,
   });
 }
 
-export default {sendEmail,compileTemplate};
+export default { sendEmail, compileTemplate };

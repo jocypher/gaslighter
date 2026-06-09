@@ -1,14 +1,12 @@
-import { ethers } from "ethers";
-import { AlertHistory } from "../../db/entities/AlertHistory";
-import { AlertRule } from "../../db/entities/AlertRule";
-import { AlertRuleStatus } from "../enums/alertRuleStatus";
-import { AlertHistoryStatus } from "../enums/alertHistoryStatus";
-import providers from "../providers";
-import { MoreThan } from "typeorm";
-import { Worker } from "bullmq";
-import envConstants from "../constants/envConstants";
-import appConstants from "../constants/appConstants";
-import { checkRecentAlert, createAlertHistory } from "../utils/alertHistoryUtilities";
+import { ethers } from 'ethers';
+import { AlertRule } from '../../db/entities/AlertRule';
+import { AlertRuleStatus } from '../enums/alertRuleStatus';
+import { AlertHistoryStatus } from '../enums/alertHistoryStatus';
+import providers from '../providers';
+import { Worker } from 'bullmq';
+import envConstants from '../constants/envConstants';
+import appConstants from '../constants/appConstants';
+import { checkRecentAlert, createAlertHistory } from '../utils/alertHistoryUtilities';
 
 // export async function processWalletBalanceAlert(alerts: AlertRule[]) {
 //   try {
@@ -83,11 +81,11 @@ export const processWalletBalanceWorker = new Worker(
       const block = await providers.ethereumWs.getBlock(blockNumber, true);
 
       if (!block || !block.transactions) {
-        console.log("No transactions");
+        console.log('No transactions');
         return { processed: 0 };
       }
       const addressMap = new Map<string, AlertRule[]>();
-      
+
       for (const alert of alerts) {
         const address = alert.targetAddress.toLowerCase();
         if (!addressMap.has(address)) {
@@ -95,7 +93,7 @@ export const processWalletBalanceWorker = new Worker(
         }
         addressMap.get(address)?.push(alert);
       }
-      let processedCount = 0
+      let processedCount = 0;
       for (const [address, alerts] of addressMap) {
         const balanceInWei = await providers.ethereumWs.getBalance(address);
 
@@ -116,11 +114,9 @@ export const processWalletBalanceWorker = new Worker(
           }
 
           if (matches) {
-            const recentAlert = await checkRecentAlert(alert.id)
+            const recentAlert = await checkRecentAlert(alert.id);
             if (recentAlert) {
-              console.warn(
-                `Already alerted for rule ${alert.id} recently. Skipping.`,
-              );
+              console.warn(`Already alerted for rule ${alert.id} recently. Skipping.`);
               continue;
             }
 
@@ -137,12 +133,9 @@ export const processWalletBalanceWorker = new Worker(
         }
       }
 
-      return {processed:processedCount}
-      
+      return { processed: processedCount };
     } catch (error) {
-      console.error(
-        "Error occurred when trying to process incoming eth worker",
-      );
+      console.error('Error occurred when trying to process incoming eth worker');
       throw error;
     }
   },
@@ -154,22 +147,17 @@ export const processWalletBalanceWorker = new Worker(
   },
 );
 
-
-
-
-
-
- processWalletBalanceWorker.on('ready', () => {
+processWalletBalanceWorker.on('ready', () => {
   console.log('PROCESS WALLET BALANCE WORKER IS READY AND LISTENING FOR JOBS ');
- });
-processWalletBalanceWorker.on("completed", (job, result) => {
+});
+processWalletBalanceWorker.on('completed', (job, result) => {
   console.log(`Job ${job.id} completed with result:`, result);
 });
 
-processWalletBalanceWorker.on("failed", (job: any, error: any) => {
+processWalletBalanceWorker.on('failed', (job: any, error: any) => {
   console.error(`Job ${job.id} failed:`, error.message);
 });
 
-processWalletBalanceWorker.on("error", (error) => {
-  console.error("Worker error:", error);
+processWalletBalanceWorker.on('error', (error) => {
+  console.error('Worker error:', error);
 });

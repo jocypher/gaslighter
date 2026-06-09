@@ -1,10 +1,10 @@
-import { NextFunction, Response } from "express";
-import { AuthRequest } from "../../../../../core/middlewares/authMiddlewares";
-import { FindOptionsWhere, ILike } from "typeorm";
-import { AlertHistory } from "../../../../../db/entities/AlertHistory";
-import { AlertHistoryStatus } from "../../../../../core/enums/alertHistoryStatus";
-import appConstants from "../../../../../core/constants/appConstants";
-import { AlertHistoryResponseDto } from "../dto";
+import { NextFunction, Response } from 'express';
+import { AuthRequest } from '../../../../../core/middlewares/authMiddlewares';
+import { FindOptionsWhere } from 'typeorm';
+import { AlertHistory } from '../../../../../db/entities/AlertHistory';
+import { AlertHistoryStatus } from '../../../../../core/enums/alertHistoryStatus';
+import appConstants from '../../../../../core/constants/appConstants';
+import { AlertHistoryResponseDto } from '../dto';
 
 export default async function ListAlertHistoryController(
   req: AuthRequest,
@@ -17,14 +17,14 @@ export default async function ListAlertHistoryController(
     const query = req.query.query as string;
     const skip = (page - 1) * limit;
 
-    let where:
-      | FindOptionsWhere<AlertHistory>
-      | FindOptionsWhere<AlertHistory>[] = {
-      status: AlertHistoryStatus.SENT,
-    };
-    const qb = AlertHistory.createQueryBuilder("alertHistory")
-      .leftJoin("alertHistory.alertRule", "alertRule")
-      .where("alert.status= :status", {
+    // const where:
+    //   | FindOptionsWhere<AlertHistory>
+    //   | FindOptionsWhere<AlertHistory>[] = {
+    //   status: AlertHistoryStatus.SENT,
+    // };
+    const qb = AlertHistory.createQueryBuilder('alertHistory')
+      .leftJoin('alertHistory.alertRule', 'alertRule')
+      .where('alert.status= :status', {
         status: AlertHistoryStatus.SENT,
       });
 
@@ -43,15 +43,12 @@ export default async function ListAlertHistoryController(
         },
       );
     }
-    const [alertHistories, total] = await qb
-      .skip(skip)
-      .take(limit)
-      .getManyAndCount();
+    const [alertHistories, total] = await qb.skip(skip).take(limit).getManyAndCount();
 
     if (total == 0) {
       return res.status(appConstants.STATUS_CODE.SUCCESS).json({
         success: false,
-        message: "No alert history available",
+        message: 'No alert history available',
       });
     }
     const alertHistoryResponse = alertHistories.map((alertHistory) =>

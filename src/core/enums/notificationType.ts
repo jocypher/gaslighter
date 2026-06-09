@@ -1,4 +1,4 @@
-export enum NotificationType{
-    EMAIL="email",
-    WEBHOOK="webhook"
+export enum NotificationType {
+  EMAIL = 'email',
+  WEBHOOK = 'webhook',
 }

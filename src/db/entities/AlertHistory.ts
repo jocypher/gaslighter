@@ -1,4 +1,4 @@
-  import {
+import {
   BaseEntity,
   Column,
   CreateDateColumn,
@@ -6,31 +6,31 @@
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
-} from "typeorm";
-import { AlertRule } from "./AlertRule";
-import { AlertHistoryStatus } from "../../core/enums/alertHistoryStatus";
+} from 'typeorm';
+import { AlertRule } from './AlertRule';
+import { AlertHistoryStatus } from '../../core/enums/alertHistoryStatus';
 
-@Entity("alert_history")
+@Entity('alert_history')
 export class AlertHistory extends BaseEntity {
-  @PrimaryGeneratedColumn("increment")
+  @PrimaryGeneratedColumn('increment')
   id: number;
 
   @ManyToOne(() => AlertRule, (rule) => rule.alertHistories, {
-    onDelete: "CASCADE",
+    onDelete: 'CASCADE',
   })
-  @JoinColumn({ name: "alert_rule_id" })
+  @JoinColumn({ name: 'alert_rule_id' })
   alertRule: AlertRule;
 
   @CreateDateColumn({ nullable: true })
   triggeredAt: Date;
 
   @Column({
-    type: "jsonb",
+    type: 'jsonb',
   })
   eventData: Record<string, any>;
 
   @Column({
-    type: "enum",
+    type: 'enum',
 
     enum: AlertHistoryStatus,
     default: AlertHistoryStatus.PENDING,

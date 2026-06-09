@@ -1,10 +1,8 @@
-import { NextFunction, Response } from "express";
-import { AuthRequest } from "../../../../../core/middlewares/authMiddlewares";
-import { FindOptionsWhere, ILike, In } from "typeorm";
-import { AlertRule } from "../../../../../db/entities/AlertRule";
-import appConstants from "../../../../../core/constants/appConstants";
-import { AlertRuleResponseDto } from "../../../../../core/utils/sharedDto";
-import { QueryBuilder } from "typeorm/browser";
+import { NextFunction, Response } from 'express';
+import { AuthRequest } from '../../../../../core/middlewares/authMiddlewares';
+import { AlertRule } from '../../../../../db/entities/AlertRule';
+import appConstants from '../../../../../core/constants/appConstants';
+import { AlertRuleResponseDto } from '../../../../../core/utils/sharedDto';
 
 export default async function ListAlertsControllers(
   req: AuthRequest,
@@ -17,13 +15,13 @@ export default async function ListAlertsControllers(
     const limit = Number(req.query.limit) || 10;
     const skip = (page - 1) * limit;
 
-    const qb = AlertRule.createQueryBuilder("alert")
-      .leftJoinAndSelect("alert.alertType", "alertType")
-      .leftJoinAndSelect("alert.user", "user")
-      .leftJoinAndSelect("alert.alertHistories", "alertHistories")
-      .where("alert.isActive= :isActive", { isActive: true });
+    const qb = AlertRule.createQueryBuilder('alert')
+      .leftJoinAndSelect('alert.alertType', 'alertType')
+      .leftJoinAndSelect('alert.user', 'user')
+      .leftJoinAndSelect('alert.alertHistories', 'alertHistories')
+      .where('alert.isActive= :isActive', { isActive: true });
 
-    if (search && search !== "") {
+    if (search && search !== '') {
       const cleanedSearch = search.trim();
 
       const trimmedQuery = `%${cleanedSearch}%`;
@@ -40,24 +38,19 @@ export default async function ListAlertsControllers(
       );
     }
 
-    const [alertRules, total] = await qb
-      .skip(skip)
-      .take(limit)
-      .getManyAndCount();
+    const [alertRules, total] = await qb.skip(skip).take(limit).getManyAndCount();
 
     console.log(alertRules);
 
     if (alertRules.length == 0) {
       return res.status(appConstants.STATUS_CODE.SUCCESS).json({
         success: false,
-        message: "No alert rules found",
+        message: 'No alert rules found',
         data: [],
       });
     }
     console.log(alertRules);
-    const response = alertRules.map((alertRule) =>
-      AlertRuleResponseDto.from(alertRule),
-    );
+    const response = alertRules.map((alertRule) => AlertRuleResponseDto.from(alertRule));
     return res.status(appConstants.STATUS_CODE.SUCCESS).json({
       success: true,
       data: response,

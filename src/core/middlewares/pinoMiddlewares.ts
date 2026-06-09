@@ -1,13 +1,13 @@
-import pino from "pino";
+import pino from 'pino';
 
-const isDev = process.env.NODE_ENV !== "production";
+const isDev = process.env.NODE_ENV !== 'production';
 
 const baseLogger = pino({
-  name: "gaslighter",
-  level: process.env.LOG_LEVEL || "info",
+  name: 'gaslighter',
+  level: process.env.LOG_LEVEL || 'info',
   ...(isDev && {
     transport: {
-      target: "pino-pretty",
+      target: 'pino-pretty',
       options: {
         colorize: true,
       },

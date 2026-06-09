@@ -1,9 +1,9 @@
-import { NextFunction, Response } from "express";
-import { AuthRequest } from "../../../../../core/middlewares/authMiddlewares";
-import { AlertRule } from "../../../../../db/entities/AlertRule";
-import appConstants from "../../../../../core/constants/appConstants";
-import UpdateAlertRequest from "../interfaces";
-import { AlertType } from "../../../../../db/entities/AlertType";
+import { NextFunction, Response } from 'express';
+import { AuthRequest } from '../../../../../core/middlewares/authMiddlewares';
+import { AlertRule } from '../../../../../db/entities/AlertRule';
+import appConstants from '../../../../../core/constants/appConstants';
+import UpdateAlertRequest from '../interfaces';
+import { AlertType } from '../../../../../db/entities/AlertType';
 
 export default async function UpdateAlertController(
   req: AuthRequest,
@@ -42,7 +42,7 @@ export default async function UpdateAlertController(
     if (!alert) {
       return res.status(appConstants.STATUS_CODE.NOTFOUND).json({
         success: false,
-        message: "Alert not found",
+        message: 'Alert not found',
       });
     }
     if (targetAddress !== undefined) {
@@ -69,7 +69,7 @@ export default async function UpdateAlertController(
       if (!alertType) {
         return res.status(appConstants.STATUS_CODE.SUCCESS).json({
           success: false,
-          message: "alert type not found",
+          message: 'alert type not found',
         });
       }
       alert.alertType = alertType;
@@ -78,7 +78,7 @@ export default async function UpdateAlertController(
     await alert.save();
     return res.status(appConstants.STATUS_CODE.SUCCESS).json({
       success: true,
-      message: "Alert updated successfully",
+      message: 'Alert updated successfully',
     });
   } catch (error) {
     next(error);

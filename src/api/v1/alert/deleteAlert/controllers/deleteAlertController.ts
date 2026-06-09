@@ -1,7 +1,7 @@
-import { NextFunction, Response } from "express";
-import { AuthRequest } from "../../../../../core/middlewares/authMiddlewares";
-import { AlertRule } from "../../../../../db/entities/AlertRule";
-import appConstants from "../../../../../core/constants/appConstants";
+import { NextFunction, Response } from 'express';
+import { AuthRequest } from '../../../../../core/middlewares/authMiddlewares';
+import { AlertRule } from '../../../../../db/entities/AlertRule';
+import appConstants from '../../../../../core/constants/appConstants';
 
 export default async function DeleteAlertController(
   req: AuthRequest,
@@ -18,14 +18,14 @@ export default async function DeleteAlertController(
     if (!alert) {
       return res.status(appConstants.STATUS_CODE.SUCCESS).json({
         success: false,
-        message: "Alert not found",
+        message: 'Alert not found',
       });
     }
     await AlertRule.delete(alertId);
 
     return res.status(appConstants.STATUS_CODE.SUCCESS).json({
       success: true,
-      message: "Alert deleted successfully",
+      message: 'Alert deleted successfully',
     });
   } catch (error) {
     next(error);
