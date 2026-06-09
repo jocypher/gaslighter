@@ -1,9 +1,8 @@
-import { Router } from "express";
-import { getQueueHealth } from "./controllers/queueHealthControllers";
-
+import { Router } from 'express';
+import { getQueueHealth } from './controllers/queueHealthControllers';
 
 const router = Router();
 
-router.get("/queue", getQueueHealth);
+router.get('/queue', getQueueHealth);
 
 export default router;

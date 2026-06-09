@@ -1,14 +1,10 @@
-import { NextFunction, Request, Response } from "express";
-import { User } from "../../../../../db/entities/User";
-import appConstants from "../../../../../core/constants/appConstants";
-import LoginRequest from "../interfaces";
-import { JwtService } from "../../../../../core/services/jwt/jwtService";
+import { NextFunction, Request, Response } from 'express';
+import { User } from '../../../../../db/entities/User';
+import appConstants from '../../../../../core/constants/appConstants';
+import LoginRequest from '../interfaces';
+import { JwtService } from '../../../../../core/services/jwt/jwtService';
 
-export async function LoginController(
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) {
+export async function LoginController(req: Request, res: Response, next: NextFunction) {
   try {
     const { email, password } = req.body as LoginRequest;
     const user = await User.findOne({
@@ -35,7 +31,7 @@ export async function LoginController(
     if (!validatePassword) {
       return res.status(appConstants.STATUS_CODE.UNAUTHORIZED).json({
         success: false,
-        message: "Invalid Credentials",
+        message: 'Invalid Credentials',
       });
     }
 
@@ -48,7 +44,7 @@ export async function LoginController(
 
     res.status(appConstants.STATUS_CODE.SUCCESS).json({
       success: true,
-      message: "Logged In successfully",
+      message: 'Logged In successfully',
       accessToken,
     });
     //  sendRegisterMail( { name: user.username }).catch((error) => {

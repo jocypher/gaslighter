@@ -87,11 +87,20 @@ feat: enhance alert processing and worker logging; integrate BullMQ, update vali
 
 feat: add email templates for Bitcoin alerts and gas price notifications; update gas price worker queue name
 
-feat: add linting and formatting scripts with husky integration
-
+feat: add linting and formatting scripts with husky integration.
 - Added ESLint and Prettier configurations for code quality.
 - Introduced linting scripts in package.json: "lint" and "lint:fix".
 - Configured husky to run lint-staged on pre-commit.
 - Updated various files to remove unused imports and improve error handling.
 - Enhanced error messages in mail sending functions for better debugging.
 - Cleaned up imports in multiple controllers and services for better readability.
+
+refactor: codebase for consistency and readability
+- Standardized import statements to use single quotes.
+- Improved formatting and spacing across multiple files for readability.
+- Updated email service to use consistent string formatting.
+- Ensured all functions and variables follow a consistent naming convention.
+- Added missing newlines at the end of files where necessary.
+- Introduced Prettier configuration for consistent code formatting.
+- Updated alert type seeding logic for clarity and consistency.
+- Enhanced error handling messages for better debugging.

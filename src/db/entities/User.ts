@@ -1,15 +1,23 @@
-import { BaseEntity, BeforeInsert, BeforeUpdate, Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-import bcrypt from "bcryptjs"
-import { AlertRule } from "./AlertRule";
+import {
+  BaseEntity,
+  BeforeInsert,
+  BeforeUpdate,
+  Column,
+  CreateDateColumn,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
+import bcrypt from 'bcryptjs';
+import { AlertRule } from './AlertRule';
 
-
-@Entity("users")
-export class User extends BaseEntity{
-
-  @PrimaryGeneratedColumn("uuid")
+@Entity('users')
+export class User extends BaseEntity {
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column("varchar", { unique: true, length: 100, nullable: false })
+  @Column('varchar', { unique: true, length: 100, nullable: false })
   username: string;
 
   @Column({ unique: true, nullable: false })
@@ -27,21 +35,21 @@ export class User extends BaseEntity{
   @UpdateDateColumn({ nullable: true })
   lastUpdate: Date;
 
-  @Column({default:false, type:"boolean"})
-  isDeleted: boolean
+  @Column({ default: false, type: 'boolean' })
+  isDeleted: boolean;
 
-  @Column({type:"date", nullable: true})
-  deletedAt:Date
+  @Column({ type: 'date', nullable: true })
+  deletedAt: Date;
 
   @BeforeInsert()
   @BeforeUpdate()
   async hashPassword() {
-    if (this.password && !this.password.startsWith("$2")) {
+    if (this.password && !this.password.startsWith('$2')) {
       this.password = await bcrypt.hash(this.password, 10);
     }
   }
 
-  async  validatePassword(password: string): Promise<boolean> {
+  async validatePassword(password: string): Promise<boolean> {
     return await bcrypt.compare(password, this.password);
   }
 }

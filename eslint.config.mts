@@ -3,7 +3,7 @@ import globals from "globals";
 import tseslint from "typescript-eslint";
 import { defineConfig } from "eslint/config";
 import unusedImports from "eslint-plugin-unused-imports";
-
+import prettier from "eslint-config-prettier"
 export default defineConfig([
   {
     ignores: ["dist/**", "node_modules/**"],
@@ -39,4 +39,5 @@ export default defineConfig([
       "no-console": "off",
     },
   },
+  prettier
 ]);

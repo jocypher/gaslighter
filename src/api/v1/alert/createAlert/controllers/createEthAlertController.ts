@@ -1,33 +1,21 @@
-import { NextFunction, Response } from "express";
-import { AuthRequest } from "../../../../../core/middlewares/authMiddlewares";
-import { AlertRuleValidations } from "../../../../../core/utils/alertRuleValidation";
-import { AlertRule } from "../../../../../db/entities/AlertRule";
-import { NotificationType } from "../../../../../core/enums/notificationType";
-import appConstants from "../../../../../core/constants/appConstants";
-import { AlertRuleResponseDto } from "../../../../../core/utils/sharedDto";
+import { NextFunction, Response } from 'express';
+import { AuthRequest } from '../../../../../core/middlewares/authMiddlewares';
+import { AlertRuleValidations } from '../../../../../core/utils/alertRuleValidation';
+import { AlertRule } from '../../../../../db/entities/AlertRule';
+import { NotificationType } from '../../../../../core/enums/notificationType';
+import appConstants from '../../../../../core/constants/appConstants';
+import { AlertRuleResponseDto } from '../../../../../core/utils/sharedDto';
 
-async function CreateEthAlertController(
-  req: AuthRequest,
-  res: Response,
-  next: NextFunction,
-) {
+async function CreateEthAlertController(req: AuthRequest, res: Response, next: NextFunction) {
   try {
-    const {
-      targetAddress,
-      status,
-      alertType,
-      notificationType,
-      thresholdValue,
-      webhookUrl,
-    } = req.body;
-    console.log(req.user)
+    const { targetAddress, status, alertType, notificationType, thresholdValue, webhookUrl } =
+      req.body;
+    console.log(req.user);
     const userId = req.user?.id;
 
     AlertRuleValidations.validateEthereumAddress(targetAddress);
 
-    const alertTypeRecord =
-      await AlertRuleValidations.findAlertTypeRecord(alertType);
- 
+    const alertTypeRecord = await AlertRuleValidations.findAlertTypeRecord(alertType);
 
     const alertRuleStatus = AlertRuleValidations.convertAlertStatusEnum(status);
 
@@ -35,12 +23,11 @@ async function CreateEthAlertController(
     let validatedThreshold: bigint | null = null;
 
     if (thresholdValue !== undefined && thresholdValue !== null) {
-      validatedThreshold =
-        AlertRuleValidations.validateThresholdValue(thresholdValue);
+      validatedThreshold = AlertRuleValidations.validateThresholdValue(thresholdValue);
     }
 
     if (notificationType === NotificationType.WEBHOOK && !webhookUrl) {
-      throw new Error("Webhook URL is required");
+      throw new Error('Webhook URL is required');
     }
 
     const alertRule = new AlertRule();

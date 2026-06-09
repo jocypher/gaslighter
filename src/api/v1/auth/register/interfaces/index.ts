@@ -1,7 +1,5 @@
-
-export default interface RegistrationRequest{
-    username:string
-    email: string
-    password: string
-
+export default interface RegistrationRequest {
+  username: string;
+  email: string;
+  password: string;
 }

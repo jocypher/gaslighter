@@ -1,8 +1,8 @@
-import { NextFunction, Response } from "express";
-import { User } from "../../../../../db/entities/User";
-import appConstants from "../../../../../core/constants/appConstants";
-import { AuthRequest } from "../../../../../core/middlewares/authMiddlewares";
-import { ProfileResponseDto } from "../dto";
+import { NextFunction, Response } from 'express';
+import { User } from '../../../../../db/entities/User';
+import appConstants from '../../../../../core/constants/appConstants';
+import { AuthRequest } from '../../../../../core/middlewares/authMiddlewares';
+import { ProfileResponseDto } from '../dto';
 
 export default async function GetProfileController(
   req: AuthRequest,
@@ -16,7 +16,7 @@ export default async function GetProfileController(
     if (!id) {
       return res.status(401).json({
         success: false,
-        message: "Invalid session",
+        message: 'Invalid session',
       });
     }
 
@@ -35,7 +35,7 @@ export default async function GetProfileController(
     if (!user) {
       return res.status(appConstants.STATUS_CODE.SUCCESS).json({
         success: false,
-        message: "User not found",
+        message: 'User not found',
       });
     }
 

@@ -1,4 +1,4 @@
-import "./IncomingEthHandler"
-import "./WalletBalanceHandler"
-import "./outgoingEthHandler"
-import "./checkGasPrice"
+import './IncomingEthHandler';
+import './WalletBalanceHandler';
+import './outgoingEthHandler';
+import './checkGasPrice';

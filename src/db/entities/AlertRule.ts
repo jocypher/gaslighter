@@ -1,47 +1,55 @@
-import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { AlertType } from "./AlertType";
-import { User } from "./User";
-import { AlertRuleStatus } from "../../core/enums/alertRuleStatus";
-import { NotificationType } from "../../core/enums/notificationType";
-import { AlertHistory } from "./AlertHistory";
+import {
+  BaseEntity,
+  Column,
+  CreateDateColumn,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { AlertType } from './AlertType';
+import { User } from './User';
+import { AlertRuleStatus } from '../../core/enums/alertRuleStatus';
+import { NotificationType } from '../../core/enums/notificationType';
+import { AlertHistory } from './AlertHistory';
 
-@Entity("alert_rules")
-export class AlertRule extends BaseEntity{
-  @PrimaryGeneratedColumn("increment")
+@Entity('alert_rules')
+export class AlertRule extends BaseEntity {
+  @PrimaryGeneratedColumn('increment')
   id: number;
 
   @ManyToOne(() => AlertType, (type) => type.alertRules)
-  @JoinColumn({ name: "alert_type_id" })
+  @JoinColumn({ name: 'alert_type_id' })
   alertType: AlertType;
 
   @ManyToOne(() => User, (user) => user.alertRules, {
-    onDelete: "CASCADE",
+    onDelete: 'CASCADE',
   })
-  @JoinColumn({ name: "user_id" })
+  @JoinColumn({ name: 'user_id' })
   user: User;
 
   @Column({ nullable: false })
   targetAddress: string;
 
   @Column({
-    type: "enum",
+    type: 'enum',
     enum: AlertRuleStatus,
-    nullable:true
+    nullable: true,
   })
   alertRuleStatus: AlertRuleStatus;
 
   @OneToMany(() => AlertHistory, (history) => history.alertRule)
   alertHistories: AlertHistory[];
-  
 
   @Column({
-    type: "bigint",
-    nullable:true
+    type: 'bigint',
+    nullable: true,
   })
   thresholdValue: bigint;
 
   @Column({
-    type: "enum",
+    type: 'enum',
     enum: NotificationType,
     default: NotificationType.EMAIL,
   })
@@ -51,7 +59,7 @@ export class AlertRule extends BaseEntity{
   webhookUrl: string;
 
   @Column({
-    type: "boolean",
+    type: 'boolean',
     default: true,
   })
   isActive: boolean;

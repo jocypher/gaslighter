@@ -1,5 +1,5 @@
-import { AlertRuleStatus } from "../../../../../core/enums/alertRuleStatus";
-import { NotificationType } from "../../../../../core/enums/notificationType";
+import { AlertRuleStatus } from '../../../../../core/enums/alertRuleStatus';
+import { NotificationType } from '../../../../../core/enums/notificationType';
 
 export default interface UpdateAlertRequest {
   targetAddress: string;

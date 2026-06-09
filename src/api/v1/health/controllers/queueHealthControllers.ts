@@ -1,11 +1,7 @@
-import { Request, Response, NextFunction } from "express";
-import queues from "../../../../core/services/bull/bullMQ";
+import { Request, Response, NextFunction } from 'express';
+import queues from '../../../../core/services/bull/bullMQ';
 
-export async function getQueueHealth(
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) {
+export async function getQueueHealth(req: Request, res: Response, next: NextFunction) {
   try {
     // Get counts for each queue
     const incomingEthCounts = await queues.incomingEthQueue.getJobCounts();
@@ -14,12 +10,12 @@ export async function getQueueHealth(
 
     // Get recent jobs
     const incomingEthJobs = await queues.incomingEthQueue.getJobs(
-      ["completed", "failed", "active"],
+      ['completed', 'failed', 'active'],
       0,
       10,
     );
     const outgoingEthJobs = await queues.outgoingEthQueue.getJobs(
-      ["completed", "failed", "active"],
+      ['completed', 'failed', 'active'],
       0,
       10,
     );
@@ -53,7 +49,7 @@ export async function getQueueHealth(
       },
     });
   } catch (error) {
-    console.error("Error fetching queue health:", error);
+    console.error('Error fetching queue health:', error);
     next(error);
   }
 }

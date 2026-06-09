@@ -1,7 +1,7 @@
-import { NextFunction, Response } from "express";
-import { User } from "../../../../../db/entities/User";
-import appConstants from "../../../../../core/constants/appConstants";
-import { AuthRequest } from "../../../../../core/middlewares/authMiddlewares";
+import { NextFunction, Response } from 'express';
+import { User } from '../../../../../db/entities/User';
+import appConstants from '../../../../../core/constants/appConstants';
+import { AuthRequest } from '../../../../../core/middlewares/authMiddlewares';
 
 export default async function DeleteUserController(
   req: AuthRequest,
@@ -34,7 +34,7 @@ export default async function DeleteUserController(
 
     return res.status(appConstants.STATUS_CODE.SUCCESS).json({
       success: true,
-      message: "Account deleted successfully",
+      message: 'Account deleted successfully',
     });
   } catch (error) {
     console.log(error);

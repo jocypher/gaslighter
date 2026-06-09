@@ -1,8 +1,8 @@
-import { NextFunction, Response } from "express";
-import { AuthRequest } from "../../../../../core/middlewares/authMiddlewares";
-import { AlertHistory } from "../../../../../db/entities/AlertHistory";
-import appConstants from "../../../../../core/constants/appConstants";
-import { AlertHistoryResponseDto } from "../../listAlertHistories/dto";
+import { NextFunction, Response } from 'express';
+import { AuthRequest } from '../../../../../core/middlewares/authMiddlewares';
+import { AlertHistory } from '../../../../../db/entities/AlertHistory';
+import appConstants from '../../../../../core/constants/appConstants';
+import { AlertHistoryResponseDto } from '../../listAlertHistories/dto';
 
 export default async function GetAlertHistoryByIdController(
   req: AuthRequest,
@@ -23,7 +23,7 @@ export default async function GetAlertHistoryByIdController(
     if (!alertHistory) {
       return res.status(appConstants.STATUS_CODE.SUCCESS).json({
         success: false,
-        message: "Alert history not found",
+        message: 'Alert history not found',
       });
     }
     console.log(alertHistory);

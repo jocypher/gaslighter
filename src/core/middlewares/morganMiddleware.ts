@@ -1,8 +1,8 @@
-import morgan from "morgan";
-import logger from "../log/winstonLogger";
+import morgan from 'morgan';
+import logger from '../log/winstonLogger';
 
 const morganMiddleware = morgan(
-  function (tokens:any, req:any, res:any) {
+  function (tokens: any, req: any, res: any) {
     return JSON.stringify({
       method: tokens.method(req, res),
       url: tokens.url(req, res),
@@ -19,8 +19,7 @@ const morganMiddleware = morgan(
         logger.http(`incoming-request`, data);
       },
     },
-  }
+  },
 );
 
-
-export default morganMiddleware
+export default morganMiddleware;

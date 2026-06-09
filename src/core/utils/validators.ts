@@ -1,4 +1,4 @@
-import { getAddress } from "ethers";
+import { getAddress } from 'ethers';
 
 export const addressValidator = (value: any, helpers: any) => {
   try {
@@ -6,6 +6,6 @@ export const addressValidator = (value: any, helpers: any) => {
       return value;
     }
   } catch (err) {
-    return helpers.error("any.invalid", err);
+    return helpers.error('any.invalid', err);
   }
 };

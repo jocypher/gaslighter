@@ -1,4 +1,4 @@
-import { User } from "../../../../../db/entities/User";
+import { User } from '../../../../../db/entities/User';
 
 export class ProfileResponseDto {
   id: string;

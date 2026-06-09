@@ -1,8 +1,8 @@
-import { DataSourceOptions } from "typeorm";
-import envConstants from "./envConstants";
+import { DataSourceOptions } from 'typeorm';
+import envConstants from './envConstants';
 
 const datasourceOptions = (): DataSourceOptions => ({
-  type: "postgres",
+  type: 'postgres',
   host: envConstants.DB.HOST,
   port: envConstants.DB.PORT,
   username: envConstants.DB.USERNAME,
