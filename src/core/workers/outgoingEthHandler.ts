@@ -1,13 +1,10 @@
 import { ethers } from "ethers";
-import { AlertHistory } from "../../db/entities/AlertHistory";
 import { AlertRule } from "../../db/entities/AlertRule";
 import providers from "../providers";
 import { AlertHistoryStatus } from "../enums/alertHistoryStatus";
-import { MoreThan } from "typeorm";
 import appConstants from "../constants/appConstants";
 import { Worker } from "bullmq";
 import envConstants from "../constants/envConstants";
-import { match } from "node:assert";
 import {
   checkRecentAlert,
   createAlertHistory,
@@ -109,7 +106,7 @@ export const processOutgoingEthWorker = new Worker(
         addressMap.get(address)?.push(alert);
       }
 
-      let processedCount = 0;
+      const processedCount = 0;
 
       for (const txHash of block.transactions) {
         try {
@@ -162,9 +159,9 @@ export const processOutgoingEthWorker = new Worker(
   },
 );
 
- processOutgoingEthWorker.on('ready', () => {
-  console.log('PROCESS OUTGOING ETH WORKER IS READY AND LISTENING FOR JOBS ');
- });
+processOutgoingEthWorker.on("ready", () => {
+  console.log("PROCESS OUTGOING ETH WORKER IS READY AND LISTENING FOR JOBS ");
+});
 processOutgoingEthWorker.on("completed", (job, result) => {
   console.log(`Job ${job.id} completed with result:`, result);
 });
@@ -176,6 +173,3 @@ processOutgoingEthWorker.on("failed", (job: any, error: any) => {
 processOutgoingEthWorker.on("error", (error) => {
   console.error("Worker error:", error);
 });
-
-
-

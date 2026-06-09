@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from "express";
+import { NextFunction, Response } from "express";
 import { AuthRequest } from "../../../../../core/middlewares/authMiddlewares";
 import { User } from "../../../../../db/entities/User";
 import appConstants from "../../../../../core/constants/appConstants";

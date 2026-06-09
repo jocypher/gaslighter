@@ -1,13 +1,13 @@
 import { ethers } from "ethers";
 import { AlertRule } from "../../db/entities/AlertRule";
 import providers from "../providers";
-import { AlertHistory } from "../../db/entities/AlertHistory";
 import { AlertHistoryStatus } from "../enums/alertHistoryStatus";
-import { MoreThan } from "typeorm";
-import ethQueue from "../services/bull/bullMQ";
 import appConstants from "../constants/appConstants";
-import { checkRecentAlert, createAlertHistory } from "../utils/alertHistoryUtilities";
-import {Worker} from "bullmq"
+import {
+  checkRecentAlert,
+  createAlertHistory,
+} from "../utils/alertHistoryUtilities";
+import { Worker } from "bullmq";
 import envConstants from "../constants/envConstants";
 import sendIncomingAlertMail from "../mail/sendAlertMail";
 // export async function processIncomingEthAlert(
@@ -147,9 +147,8 @@ export const processIncomingEthWorker = new Worker(
               name: alert.user.username,
               result: eventData,
               timestamp: block.timestamp,
-
-            }
-            await sendIncomingAlertMail(data)
+            };
+            await sendIncomingAlertMail(data);
           }
         } catch (error) {
           console.warn(`Error processing transaction ${txHash}:`, error);
@@ -172,21 +171,20 @@ export const processIncomingEthWorker = new Worker(
     connection: {
       host: envConstants.REDIS_OPTIONS.host,
       port: envConstants.REDIS_OPTIONS.port,
-    }
+    },
   },
 );
 //Event listeners
 
-processIncomingEthWorker.on('ready', () => {
-  console.log('PROCESS INCOMING WORKER IS READY AND LISTENING FOR JOBS ');
+processIncomingEthWorker.on("ready", () => {
+  console.log("PROCESS INCOMING WORKER IS READY AND LISTENING FOR JOBS ");
 });
-
 
 processIncomingEthWorker.on("completed", (job, result) => {
   console.log(`Job ${job.id} completed with result:`, result);
 });
 
-processIncomingEthWorker.on("failed", (job:any, error:any) => {
+processIncomingEthWorker.on("failed", (job: any, error: any) => {
   console.error(`Job ${job.id} failed:`, error.message);
 });
 

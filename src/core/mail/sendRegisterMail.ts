@@ -14,8 +14,10 @@ async function sendRegisterMail(data: { name: string }) {
       html,
     });
   } catch (error) {
-    throw new Error("Server Error occurred");
+    const err = new Error("Failed to send register mail");
+    (err as any).cause = error;
+    throw err;
   }
 }
 
-export default sendRegisterMail
+export default sendRegisterMail;

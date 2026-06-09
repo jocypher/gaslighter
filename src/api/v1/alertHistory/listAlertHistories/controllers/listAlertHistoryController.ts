@@ -1,6 +1,6 @@
 import { NextFunction, Response } from "express";
 import { AuthRequest } from "../../../../../core/middlewares/authMiddlewares";
-import { FindOptionsWhere, ILike } from "typeorm";
+import { FindOptionsWhere } from "typeorm";
 import { AlertHistory } from "../../../../../db/entities/AlertHistory";
 import { AlertHistoryStatus } from "../../../../../core/enums/alertHistoryStatus";
 import appConstants from "../../../../../core/constants/appConstants";
@@ -17,11 +17,11 @@ export default async function ListAlertHistoryController(
     const query = req.query.query as string;
     const skip = (page - 1) * limit;
 
-    let where:
-      | FindOptionsWhere<AlertHistory>
-      | FindOptionsWhere<AlertHistory>[] = {
-      status: AlertHistoryStatus.SENT,
-    };
+    // const where:
+    //   | FindOptionsWhere<AlertHistory>
+    //   | FindOptionsWhere<AlertHistory>[] = {
+    //   status: AlertHistoryStatus.SENT,
+    // };
     const qb = AlertHistory.createQueryBuilder("alertHistory")
       .leftJoin("alertHistory.alertRule", "alertRule")
       .where("alert.status= :status", {

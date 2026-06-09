@@ -86,3 +86,12 @@ feat: add .env.example file with configuration settings for database, redis, blo
 feat: enhance alert processing and worker logging; integrate BullMQ, update validation schema, and refactor datasource options
 
 feat: add email templates for Bitcoin alerts and gas price notifications; update gas price worker queue name
+
+feat: add linting and formatting scripts with husky integration
+
+- Added ESLint and Prettier configurations for code quality.
+- Introduced linting scripts in package.json: "lint" and "lint:fix".
+- Configured husky to run lint-staged on pre-commit.
+- Updated various files to remove unused imports and improve error handling.
+- Enhanced error messages in mail sending functions for better debugging.
+- Cleaned up imports in multiple controllers and services for better readability.

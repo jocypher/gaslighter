@@ -1,10 +1,8 @@
 import { Worker } from "bullmq";
 import appConstants from "../constants/appConstants";
 import providers from "../providers";
-import { AlertRule } from "../../db/entities/AlertRule";
 import { ethers } from "ethers";
 import { AlertRuleStatus } from "../enums/alertRuleStatus";
-import { match } from "node:assert";
 import {
   checkRecentAlert,
   createAlertHistory,
@@ -31,7 +29,7 @@ export const checkGasPrice = new Worker(
 
       let processedCount = 0;
 
-      for (let alert of alerts) {
+      for (const alert of alerts) {
         try {
           const thresholdValue = BigInt(alert.thresholdValue);
           let matches = false;
@@ -77,14 +75,16 @@ export const checkGasPrice = new Worker(
             // });
           }
         } catch (error) {
-          console.warn("Error occurred at ");
+          console.warn("Error occurred at ", error);
           continue;
         }
       }
 
       return { processed: processedCount };
     } catch (error) {
-      throw new Error("An error occurred here");
+      const err = new Error("Failed to process gas price worker");
+      (err as any).cause = error;
+      throw err;
     }
   },
   {
@@ -95,16 +95,17 @@ export const checkGasPrice = new Worker(
   },
 );
 
-
-checkGasPrice.on('ready', () => {
-  console.log('PROCESS CHECK GAS PRICE WORKER IS READY AND LISTENING FOR JOBS ');
- });
+checkGasPrice.on("ready", () => {
+  console.log(
+    "PROCESS CHECK GAS PRICE WORKER IS READY AND LISTENING FOR JOBS ",
+  );
+});
 
 checkGasPrice.on("completed", (job, result) => {
   console.log(`Job ${job.id} completed with result:`, result);
 });
 
-checkGasPrice.on("failed", (job:any, error:any) => {
+checkGasPrice.on("failed", (job: any, error: any) => {
   console.error(`Job ${job.id} failed:`, error.message);
 });
 

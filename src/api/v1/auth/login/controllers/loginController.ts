@@ -3,7 +3,6 @@ import { User } from "../../../../../db/entities/User";
 import appConstants from "../../../../../core/constants/appConstants";
 import LoginRequest from "../interfaces";
 import { JwtService } from "../../../../../core/services/jwt/jwtService";
-import sendRegisterMail from "../../../../../core/mail/sendRegisterMail";
 
 export async function LoginController(
   req: Request,

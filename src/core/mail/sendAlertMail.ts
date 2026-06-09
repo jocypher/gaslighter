@@ -13,7 +13,6 @@ async function sendIncomingAlertMail(data: {
       app_name: envConstants.APP_NAME,
       result: data.result,
       timestamp: data.timestamp,
-
     });
 
     return emailService.sendEmail({
@@ -21,7 +20,9 @@ async function sendIncomingAlertMail(data: {
       html,
     });
   } catch (error) {
-    throw new Error("Server couldn't send email");
+    const err = new Error("Failed to send incoming alert mail");
+    (err as any).cause = error;
+    throw err;
   }
 }
 

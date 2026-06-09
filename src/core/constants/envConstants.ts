@@ -2,17 +2,17 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const envConstants = {
-  APP_NAME: process.env.app ?? "",
+  APP_NAME: process.env.app || "",
   DB: {
-    HOST: process.env.PG_HOST ?? "localhost",
-    PORT: Number(process.env.PG_PORT) ?? 5432,
-    USERNAME: process.env.PG_USER ?? "",
-    PASSWORD: process.env.PG_PASSWORD ?? "",
-    NAME: process.env.PG_DATABASE ?? "",
+    HOST: process.env.PG_HOST || "localhost",
+    PORT: Number(process.env.PG_PORT) || 5432,
+    USERNAME: process.env.PG_USER || "",
+    PASSWORD: process.env.PG_PASSWORD || "",
+    NAME: process.env.PG_DATABASE || "",
   },
 
   JWT: {
-    SECRET: process.env.JWT_SECRET ?? "",
+    SECRET: process.env.JWT_SECRET || "",
     EXPIRES_IN: "1d",
   },
 
@@ -35,8 +35,8 @@ const envConstants = {
     },
   },
   SMTP: {
-    HOST: process.env.SMTP_HOST ?? "",
-    PORT: Number(process.env.SMTP_PORT) ?? 587,
+    HOST: process.env.SMTP_HOST || "",
+    PORT: Number(process.env.SMTP_PORT) || 587,
     USERNAME: process.env.SMTP_USERNAME,
     PASSWORD: process.env.SMTP_PASSWORD,
   },

@@ -1,6 +1,5 @@
 import { AlertHistoryStatus } from "../../../../../core/enums/alertHistoryStatus";
 import { AlertHistory } from "../../../../../db/entities/AlertHistory";
-import { AlertRule } from "../../../../../db/entities/AlertRule";
 
 export class AlertHistoryResponseDto {
   id: number;

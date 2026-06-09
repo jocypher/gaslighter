@@ -46,11 +46,12 @@ export default async function RegisterController(
       accessToken,
     });
 
-    sendRegisterMail({ name: createdUser.username }).catch(
-      (error) => {
-        console.error(`Failed to send email`);
-      },
-    );
+    sendRegisterMail({ name: createdUser.username }).catch((error) => {
+      console.error(`Failed to send email`);
+      const err = new Error("Failed to send register mail");
+      (err as any).cause = error;
+      throw err;
+    });
   } catch (error) {
     next(error);
   }

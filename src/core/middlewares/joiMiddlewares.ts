@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import Joi, { valid } from "joi";
+import Joi from "joi";
 
 type RequestLocation = "body" | "query" | "params";
 
@@ -37,4 +37,4 @@ const validate = (schema: Joi.Schema, location: RequestLocation = "body") => {
   };
 };
 
-export default validate
+export default validate;

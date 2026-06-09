@@ -53,7 +53,7 @@ export class EthereumListenerService {
           `Get the length of gas price alerts`,
           gasPriceAlerts.length,
         );
-        
+
         if (incomingEthAlerts.length > 0) {
           const jobId = `incoming-${blockNumber}-${Date.now()}`;
           await queues.incomingEthQueue.add(
@@ -150,6 +150,8 @@ async function getCachedAlertRules(): Promise<AlertRule[]> {
     return alerts;
   } catch (error) {
     console.warn(`Error occurred on the system`);
-    throw new Error("Error occurred");
+    const err = new Error("Failed to fetch cached alert rules");
+    (err as any).cause = error;
+    throw err;
   }
 }

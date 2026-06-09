@@ -2,11 +2,11 @@ import envConstants from "../constants/envConstants";
 import emailService from "../services/email/emailService";
 import { changePasswordTemplate } from "../services/email/emailTemplates";
 
-async function changePasswordMail( data: { name: string }) {
+async function changePasswordMail(data: { name: string }) {
   try {
     const html = emailService.compileTemplate(changePasswordTemplate, {
       name: data.name,
-      app_name: envConstants.APP_NAME
+      app_name: envConstants.APP_NAME,
     });
 
     return emailService.sendEmail({
@@ -14,9 +14,10 @@ async function changePasswordMail( data: { name: string }) {
       html,
     });
   } catch (error) {
-    throw new Error("Server couldn't send email");
+    const err = new Error("Failed to send change password mail");
+    (err as any).cause = error;
+    throw err;
   }
 }
 
-
-export default changePasswordMail
+export default changePasswordMail;

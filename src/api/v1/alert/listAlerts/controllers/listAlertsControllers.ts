@@ -1,10 +1,8 @@
 import { NextFunction, Response } from "express";
 import { AuthRequest } from "../../../../../core/middlewares/authMiddlewares";
-import { FindOptionsWhere, ILike, In } from "typeorm";
 import { AlertRule } from "../../../../../db/entities/AlertRule";
 import appConstants from "../../../../../core/constants/appConstants";
 import { AlertRuleResponseDto } from "../../../../../core/utils/sharedDto";
-import { QueryBuilder } from "typeorm/browser";
 
 export default async function ListAlertsControllers(
   req: AuthRequest,
