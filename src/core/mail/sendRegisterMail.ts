@@ -5,7 +5,7 @@ async function sendRegisterMail(data: { name: string }) {
   try {
     const html = emailService.compileTemplate(registerTemplate, {
       name: data.name,
-      app_name: envConstants.APP_NAME,
+      app_name: envConstants.APP.NAME,
     });
     console.log('This is the html', html);
 

@@ -2,7 +2,12 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const envConstants = {
-  APP_NAME: process.env.app || '',
+  APP: {
+    NAME: process.env.APP_NAME || 'Gaslighter',
+    VERSION: process.env.VERSION || '1.0.0',
+    PORT: Number(process.env.PORT) || 3000,
+    ENV: process.env.NODE_ENV || 'development',
+  },
   DB: {
     HOST: process.env.PG_HOST || 'localhost',
     PORT: Number(process.env.PG_PORT) || 5432,

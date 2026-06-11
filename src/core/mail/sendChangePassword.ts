@@ -6,7 +6,7 @@ async function changePasswordMail(data: { name: string }) {
   try {
     const html = emailService.compileTemplate(changePasswordTemplate, {
       name: data.name,
-      app_name: envConstants.APP_NAME,
+      app_name: envConstants.APP.NAME,
     });
 
     return emailService.sendEmail({

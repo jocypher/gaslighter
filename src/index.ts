@@ -11,6 +11,7 @@ import './core/workers';
 import morgan from 'morgan';
 import helmet from 'helmet';
 import morganMiddleware from './core/middlewares/morganMiddleware';
+import envConstants from './core/constants/envConstants';
 
 dotenv.config();
 
@@ -26,6 +27,11 @@ app.use(requestLogger);
 
 app.use(appRouter);
 
+app.post('*path', (req: any, res: any) => {
+  console.log(req.body);
+  console.log('testing');
+});
+
 AppDatasource.initialize()
   .then(async () => {
     console.log('Database connected successfully');
@@ -38,8 +44,8 @@ AppDatasource.initialize()
     app.listen(PORT, async () => {
       console.log(`Server is running on port ${PORT}`);
       console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
-      const ethereumService = new EthereumListenerService();
-      await ethereumService.startListening();
+      //const ethereumService = new EthereumListenerService();
+      //await ethereumService.startListening();
     });
   })
   .catch((error) => {

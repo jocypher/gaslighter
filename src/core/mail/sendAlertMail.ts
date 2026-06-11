@@ -6,7 +6,7 @@ async function sendIncomingAlertMail(data: { name: string; result: any; timestam
   try {
     const html = emailService.compileTemplate(incomingAlertTemplate, {
       name: data.name,
-      app_name: envConstants.APP_NAME,
+      app_name: envConstants.APP.NAME,
       result: data.result,
       timestamp: data.timestamp,
     });

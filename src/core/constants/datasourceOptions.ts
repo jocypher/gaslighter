@@ -8,6 +8,9 @@ const datasourceOptions = (): DataSourceOptions => ({
   username: envConstants.DB.USERNAME,
   password: envConstants.DB.PASSWORD,
   database: envConstants.DB.NAME,
+  schema: 'public',
+  logging: envConstants.APP.ENV === 'production' ? false : true,
+  synchronize: false,
 });
 
 export default datasourceOptions;

@@ -8,8 +8,6 @@ import path from 'path';
 
 const AppDatasource = new DataSource({
   ...datasourceOptions(),
-  synchronize: false,
-  logging: false,
   entities: [User, AlertHistory, AlertRule, AlertType],
   migrations: [path.join(__dirname, '../db/migrations/*.{ts,js}')],
   migrationsTableName: 'Gaslighter_Migrations',

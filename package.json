@@ -15,7 +15,7 @@
     "typeorm": "typeorm-ts-node-commonjs",
     "migration:generate": "npm run typeorm -- migration:generate -d src/db/datasource",
     "migration:create": "npm run typeorm -- migration:create -d src/db/datasource",
-    "migration:run": "npm run typeorm -- migration:run -d src/db/datasource src/db/migrations",
+    "migration:run": "npm run typeorm -- migration:run -d src/db/datasource",
     "migration:revert": "npm run typeorm -- migration:revert -d src/db/datasource",
     "migration:show": "npm run typeorm -- migration:show -d src/db/datasource",
     "seed": "ts-node src/db/seeds/alertType.seed.ts"
